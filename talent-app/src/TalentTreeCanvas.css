@@ -1,0 +1,395 @@
+.talent-tree-canvas-container {
+  position: relative;
+  width: fit-content;
+  background: linear-gradient(135deg, #0a0d14 0%, #0f1520 100%);
+  border: 1px solid #4a3b1f;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  padding-top: 6.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* Tree mastery progress section */
+.tree-progress-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0.95rem 0.85rem 0.8rem;
+  background: rgba(10, 13, 20, 0.6);
+  border-bottom: 1px solid rgba(158, 124, 58, 0.75);
+  border-radius: 8px 8px 0 0;
+}
+
+.tree-progress-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  color: #f0d8ad;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.tree-progress-title-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: cover;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.tree-progress-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.tree-progress-label-left,
+.tree-progress-label-right {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 10px;
+  color: #d3bc86;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tree-progress-label-right {
+  justify-content: flex-end;
+}
+
+.tree-progress-rank-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.tree-progress-bar-bg {
+  height: 6px;
+  background: rgba(212, 165, 116, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tree-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #d59a2a 0%, #f0c35c 100%);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* SVG for edges */
+.talent-tree-edges {
+  position: absolute;
+  top: 5.4rem;
+  left: 1rem;
+  pointer-events: none;
+}
+
+/* Edges styling */
+.edges {
+  pointer-events: none;
+}
+
+.edge {
+  stroke: #dca52e;
+  fill: none;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  opacity: 0.7;
+  transition: opacity 0.2s, stroke-width 0.2s;
+}
+
+.edge.fulfilled {
+  opacity: 0.95;
+}
+
+.edge.unfulfilled {
+  stroke: #6d6553;
+  opacity: 0.45;
+}
+
+.edge.hovered {
+  opacity: 1;
+  stroke: #f5cb64;
+}
+
+/* Nodes container */
+.talent-nodes-container {
+  position: relative;
+  pointer-events: none;
+  margin-top: 0;
+}
+
+/* Talent nodes */
+.talent-node {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.talent-frame {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #d4a574;
+  border-radius: 4px;
+  background: #1f1a12;
+  transition: all 0.2s;
+}
+
+.talent-node.hovered .talent-frame {
+  background: #2a2217;
+  border-color: #f0c36b;
+  border-width: 2.5px;
+}
+
+.talent-node.available-unskilled .talent-frame {
+  border-color: #f2f2f2;
+}
+
+.talent-node.available-unskilled.hovered .talent-frame {
+  border-color: #ffffff;
+}
+
+.talent-icon-bg {
+  position: absolute;
+  inset: 8px;
+  background: #11100c;
+  opacity: 0.6;
+  border-radius: 2px;
+  transition: opacity 0.2s;
+  overflow: hidden;
+}
+
+.talent-icon-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.talent-node.hovered .talent-icon-bg {
+  opacity: 0.8;
+}
+
+/* Progress bar */
+.progress-bar-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(212, 165, 116, 0.22);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: #dca52e;
+  transition: width 0.3s ease;
+}
+
+/* Disabled state */
+.talent-node.disabled .talent-frame {
+  border-color: #6a5d45;
+  background: #17140f;
+}
+
+.talent-node.disabled .talent-frame,
+.talent-node.disabled .talent-icon-bg,
+.talent-node.disabled .rank-badge,
+.talent-node.disabled .rank-icon-badge,
+.talent-node.disabled .progress-bar-bg,
+.talent-node.disabled .progress-bar-fill {
+  filter: grayscale(1);
+}
+
+.talent-node.disabled .talent-icon-bg {
+  opacity: 0.6;
+}
+
+.talent-node.disabled .progress-bar-bg {
+  opacity: 1;
+}
+
+/* Badges */
+.rank-badge {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  width: 20px;
+  height: 20px;
+  background: #f0be3f;
+  border: 1.5px solid #f0be3f;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: bold;
+  color: #111111;
+  pointer-events: none;
+}
+
+.rank-badge.available {
+  background: #f5f5f5;
+  border-color: #f5f5f5;
+  color: #111111;
+}
+
+.rank-badge.invested {
+  background: #f0be3f;
+  border-color: #f0be3f;
+  color: #111111;
+}
+
+.rank-badge.locked {
+  background: #8b7a52;
+  border-color: #8b7a52;
+  color: #1a1a1a;
+}
+
+.rank-icon-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px;
+  height: 20px;
+  background: #2a2416;
+  border: 1.5px solid #d4a574;
+  border-radius: 3px;
+  opacity: 0.8;
+  pointer-events: none;
+  object-fit: cover;
+}
+
+/* Tooltip */
+.talent-tooltip-html {
+  position: fixed;
+  background: #18140d;
+  border: 1px solid #d4a574;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 11px;
+  color: #f0e4c8;
+  pointer-events: none;
+  z-index: 1000;
+  width: max-content;
+  max-width: min(90vw, 720px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.tooltip-header {
+  margin-bottom: 6px;
+}
+
+.tooltip-title {
+  color: #ffecc2;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.tooltip-description {
+  color: #cdbd97;
+  margin-bottom: 6px;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.tooltip-prerequisites {
+  margin-bottom: 6px;
+  padding: 4px;
+  background: rgba(212, 165, 116, 0.12);
+  border-radius: 2px;
+}
+
+.tooltip-prerequisites .label {
+  color: #d3bc86;
+  font-size: 9px;
+  margin-bottom: 2px;
+  display: block;
+}
+
+.prerequisite {
+  font-size: 9px;
+  font-family: monospace;
+  padding: 2px 4px 2px 6px;
+  margin: 2px 0;
+  border-radius: 2px;
+}
+
+.prerequisite.met {
+  color: #7dd87d;
+  background: linear-gradient(
+    to right,
+    #7dd87d 0,
+    #7dd87d 2px,
+    rgba(125, 216, 125, 0.1) 2px,
+    rgba(125, 216, 125, 0.1) 100%
+  );
+}
+
+.prerequisite.unmet {
+  color: #ff7b7b;
+  background: linear-gradient(
+    to right,
+    #ff7b7b 0,
+    #ff7b7b 2px,
+    rgba(255, 123, 123, 0.1) 2px,
+    rgba(255, 123, 123, 0.1) 100%
+  );
+}
+
+.tooltip-rewards {
+  padding-top: 4px;
+  border-top: 1px solid rgba(212, 165, 116, 0.35);
+}
+
+.reward-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 2px 6px;
+  font-size: 10px;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.reward-row.current-rank {
+  background: linear-gradient(
+    to right,
+    #d59a2a 0,
+    #d59a2a 2px,
+    rgba(213, 154, 42, 0.2) 2px,
+    rgba(213, 154, 42, 0.2) 100%
+  );
+  border-radius: 2px;
+}
+
+.rank-label {
+  color: #d7c49a;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.rank-value {
+  color: #f0c36b;
+  font-weight: bold;
+  white-space: nowrap;
+}

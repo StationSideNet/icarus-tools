@@ -1,0 +1,11 @@
+{
+  "name": "talent-transform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:inputs": "node src/preflight-inputs.mjs",
+    "transform": "node src/index.mjs",
+    "transform:watch": "node src/index.mjs --watch"
+  }
+}

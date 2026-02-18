@@ -1,0 +1,53 @@
+This directoory houses FMODEL exports.
+
+The minimal set needed to build the current talent app are
+
+├───Icarus
+│   └───Content
+│       ├───Assets
+│       │   └───2DArt
+│       │       └───UI
+│       │           ├───Icons
+│       │           │   ├───ArmorAttachments
+│       │           │   ├───BestiaryTraits
+│       │           │   ├───BossMonsters
+│       │           │   ├───Currency
+│       │           │   ├───FactionMissionTypes
+│       │           │   ├───FeatureLevel
+│       │           │   ├───MapIcons
+│       │           │   ├───MissionIcons
+│       │           │   ├───MountTameIcons
+│       │           │   ├───NonCC0
+│       │           │   ├───WeaponAttachments
+│       │           │   └───Weather
+│       │           │       └───Debuffs
+│       │           └───Talents
+│       │               ├───Backgrounds
+│       │               ├───Blades
+│       │               ├───Bows
+│       │               ├───Building
+│       │               ├───Companion
+│       │               ├───Cooking
+│       │               ├───Exploration
+│       │               ├───Firearms
+│       │               ├───Fishing
+│       │               ├───Hunting
+│       │               ├───Repairing
+│       │               ├───Resources
+│       │               ├───Solo
+│       │               ├───Spears
+│       │               ├───Tools
+│       │               └───Type
+│       └───Localization
+│           └───Game
+│               ├───de-DE
+│               ├───en
+│               ├───es-419
+│               ├───fr-FR
+│               ├───ja-JP
+│               ├───ko-KR
+│               ├───pt-BR
+│               ├───ru-RU
+│               ├───zh-Hans
+│               └───zh-Hant
+└───Talents
