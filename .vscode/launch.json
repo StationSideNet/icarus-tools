@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "talent-app: dev",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/talent-app"
+    },
+    {
+      "name": "talent-app: build",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run build",
+      "cwd": "${workspaceFolder}/talent-app"
+    },
+    {
+      "name": "talent-app: run",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run preview",
+      "cwd": "${workspaceFolder}/talent-app"
+    }
+  ]
+}
