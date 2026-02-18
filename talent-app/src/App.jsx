@@ -5,10 +5,11 @@ import '@fontsource/orbitron/800.css'
 import './App.css'
 import TalentTreeCanvas from './TalentTreeCanvas'
 
-const DATA_URL = '/Data/talents.json'
-const LOCALE_BASE_URL = '/Exports/Icarus/Content/Localization/Game'
+const resolveAppUrl = (relativePath) => new URL(relativePath, document.baseURI).toString()
+const DATA_URL = resolveAppUrl('Data/talents.json')
+const LOCALE_BASE_URL = resolveAppUrl('Exports/Icarus/Content/Localization/Game')
 const LOCALE_CONFIG_URL = `${LOCALE_BASE_URL}/Game.json`
-const MODIFIER_LABELS_URL = '/Data/Localization/en.json'
+const MODIFIER_LABELS_URL = resolveAppUrl('Data/Localization/en.json')
 const DEFAULT_LOCALE = 'en'
 const LOCALE_COOKIE_NAME = 'talent_locale'
 const SAVED_BUILDS_STORAGE_KEY = 'talent_saved_builds_v1'
@@ -3145,7 +3146,7 @@ function resolveAssetImagePath(unrealPath) {
     return null
   }
 
-  return `/Exports/Icarus/Content/${packagePath}.png`
+  return resolveAppUrl(`Exports/Icarus/Content/${packagePath}.png`)
 }
 
 function extractModifierId(effect) {

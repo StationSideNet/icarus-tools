@@ -3,6 +3,7 @@ import './TalentTreeCanvas.css'
 
 const NODE_SCALE = 0.5
 const DEFAULT_EDGE_METHOD = 'YThenX'
+const resolveAppUrl = (relativePath) => new URL(relativePath, document.baseURI).toString()
 
 const scaleValue = (value) => value * NODE_SCALE
 
@@ -771,7 +772,7 @@ function resolveAssetImagePath(unrealPath) {
     return null
   }
 
-  return `/Exports/Icarus/Content/${packagePath}.png`
+  return resolveAppUrl(`Exports/Icarus/Content/${packagePath}.png`)
 }
 
 export default TalentTreeCanvas
