@@ -92,6 +92,35 @@
   flex-wrap: wrap;
 }
 
+.top-nav-github-link {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid #4a4f5b;
+  background: #262a33;
+  color: #d6dae4;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.top-nav-github-link:hover {
+  border-color: #646b7a;
+  color: #eef1f8;
+}
+
+.top-nav-github-link:focus-visible {
+  outline: 2px solid #767f91;
+  outline-offset: 2px;
+}
+
+.top-nav-github-icon {
+  width: 16px;
+  height: 16px;
+}
+
 .top-menu {
   display: flex;
   align-items: center;

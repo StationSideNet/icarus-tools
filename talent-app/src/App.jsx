@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { BR, CN, DE, ES, FR, GB, JP, KR, RU, TW } from 'country-flag-icons/react/3x2'
-import { Check, ChevronLeft, ChevronRight, FolderOpen, Save, Share2, Trash2 } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, FolderOpen, Github, Save, Share2, Trash2 } from 'lucide-react'
 import '@fontsource/orbitron/800.css'
 import './App.css'
 import TalentTreeCanvas from './TalentTreeCanvas'
@@ -36,6 +36,7 @@ const CREATURE_TAB_GROUPS = [
   { id: 'combatPet', label: 'Pets' },
   { id: 'regularPet', label: 'Livestock' }
 ]
+const GITHUB_REPO_URL = 'https://github.com/StationSideNet/icarus-tools'
 const ROCKETWERKZ_URL = 'https://rocketwerkz.com/'
 const ICARUS_STEAM_URL = 'https://store.steampowered.com/sale/icarus'
 const LOCALE_FLAG_COMPONENTS = {
@@ -1464,6 +1465,16 @@ function App() {
               selectedLocale={locale}
               onSelectLocale={setLocale}
             />
+            <a
+              href={GITHUB_REPO_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="top-nav-github-link"
+              aria-label="Open GitHub repository"
+              title="GitHub"
+            >
+              <Github className="top-nav-github-icon" aria-hidden="true" />
+            </a>
           </div>
         </header>
 
@@ -1541,6 +1552,16 @@ function App() {
             selectedLocale={locale}
             onSelectLocale={setLocale}
           />
+          <a
+            href={GITHUB_REPO_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="top-nav-github-link"
+            aria-label="View on GitHub"
+            title="View on GitHub"
+          >
+            <Github className="top-nav-github-icon" aria-hidden="true" />
+          </a>
         </div>
       </header>
 
