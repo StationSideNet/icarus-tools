@@ -2119,9 +2119,15 @@ function getCreatureTreeProgressById(model) {
       const hasCombatPetTalentPrefix = talentIds.some((talentId) => talentId.startsWith('CombatPet_'))
       const hasRegularPetTalentPrefix = talentIds.some((talentId) => talentId.startsWith('NonCombatPet_'))
 
-      const category = hasRegularPetTalentPrefix
+      let category = hasRegularPetTalentPrefix
         ? 'regularPet'
         : (hasCombatPetTalentPrefix ? 'combatPet' : 'mount')
+
+      // Creatures added by Homestead patch use talent naming that can misclassify them as combat pets.
+      if (tree.id === 'Creature_Bull' || tree.id === 'Creature_Pig') {
+        category = 'regularPet'
+      }
+      
       const levelCap = category === 'mount' ? CREATURE_MOUNT_LEVEL_CAP : CREATURE_PET_LEVEL_CAP
 
       byTreeId[tree.id] = {
