@@ -42,6 +42,7 @@ jobs:
         run: npm run build
         env:
           VITE_BASE_PATH: talents/
+          VITE_CANONICAL_URL: https://tools.stationside.net/talents/
 
       - name: Stage Pages site structure
         run: |
