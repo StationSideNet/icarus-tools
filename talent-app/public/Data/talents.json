@@ -1,6 +1,6 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-02-18T16:36:35.587Z",
+  "generatedAt": "2026-02-20T11:11:25.178Z",
   "source": {
     "gameExportDir": "../Exports"
   },
@@ -3814,7 +3814,7 @@
                   "treeId": "Survival_Exploration",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Exploration_Revive_Regeneration-DisplayName\", \"And Some For Me\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Exploration_Revive_Regeneration-Description\", \"Reviving a player also regenerates your health\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Exploration_Revive_Regeneration-Description\", \"Reviving a player increases your health regeneration\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Exploration/Talent_Exploration_SomeForMe.Talent_Exploration_SomeForMe",
                   "extraData": null,
                   "position": {
@@ -4607,7 +4607,7 @@
                   "extraData": null,
                   "position": {
                     "x": 150,
-                    "y": 1050
+                    "y": 950
                   },
                   "size": {
                     "x": 128,
@@ -4643,7 +4643,7 @@
                   "extraData": null,
                   "position": {
                     "x": 650,
-                    "y": 1250
+                    "y": 1450
                   },
                   "size": {
                     "x": 128,
@@ -4786,7 +4786,7 @@
                   "extraData": null,
                   "position": {
                     "x": 550,
-                    "y": 1050
+                    "y": 1150
                   },
                   "size": {
                     "x": 128,
@@ -4831,7 +4831,7 @@
                   "extraData": null,
                   "position": {
                     "x": 650,
-                    "y": 850
+                    "y": 900
                   },
                   "size": {
                     "x": 128,
@@ -5018,7 +5018,7 @@
                   "extraData": null,
                   "position": {
                     "x": 650,
-                    "y": 450
+                    "y": 500
                   },
                   "size": {
                     "x": 128,
@@ -5125,7 +5125,7 @@
                   "extraData": null,
                   "position": {
                     "x": 450,
-                    "y": 600
+                    "y": 500
                   },
                   "size": {
                     "x": 128,
@@ -5362,7 +5362,7 @@
                   "extraData": null,
                   "position": {
                     "x": 250,
-                    "y": 600
+                    "y": 500
                   },
                   "size": {
                     "x": 128,
@@ -5479,8 +5479,8 @@
                   "icon": null,
                   "extraData": null,
                   "position": {
-                    "x": 450,
-                    "y": 450
+                    "x": 350,
+                    "y": 350
                   },
                   "size": {
                     "x": 0,
@@ -5507,7 +5507,7 @@
                   "extraData": null,
                   "position": {
                     "x": 250,
-                    "y": 800
+                    "y": 750
                   },
                   "size": {
                     "x": 128,
@@ -5554,6 +5554,876 @@
                         {
                           "rawKey": "(Value=\"BaseTamedCreatureMeleeDamage_+%\")",
                           "value": 20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                }
+              }
+            },
+            "Construction_Genetics": {
+              "id": "Construction_Genetics",
+              "archetypeId": "Player_Adventure",
+              "display": "NSLOCTEXT(\"D_TalentTrees\", \"Construction_Genetics-DisplayName\", \"Genetics\")",
+              "icon": "/Game/Assets/2DArt/UI/Icons/MountTameIcons/ICON_MountStay.ICON_MountStay",
+              "background": "/Game/Assets/2DArt/UI/Talents/Backgrounds/Construction_Husbandry_Background.Construction_Husbandry_Background",
+              "firstRank": "Novice",
+              "requiredLevel": 0,
+              "talents": {
+                "Genetics_GestationSpeed": {
+                  "id": "Genetics_GestationSpeed",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_GestationSpeed-DisplayName\", \"Rapid Breeder\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_GestationSpeed-Description\", \"Faster Tamed Creature Gestation\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_RapidBreeder.T_Talent_Genetic_RapidBreeder",
+                  "extraData": null,
+                  "position": {
+                    "x": 200,
+                    "y": 50
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGestationSpeed_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGestationSpeed_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGestationSpeed_+%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_GenotypeMutation": {
+                  "id": "Genetics_GenotypeMutation",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_GenotypeMutation-DisplayName\", \"Wildcard\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_GenotypeMutation-Description\", \"Increased Genotype Mutation (Creature Stats) chance during Fertilization\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_WildCard.T_Talent_Genetic_WildCard",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Apprentice",
+                  "requiredTalents": [
+                    "Genetics_Mutation_Reroute"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGeneticsMutationChance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGeneticsMutationChance_%\")",
+                          "value": 4
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGeneticsMutationChance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_GenotypeMutation2": {
+                  "id": "Genetics_GenotypeMutation2",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_GenotypeMutation2-DisplayName\", \"Genetic Volatility\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_GenotypeMutation2-Description\", \"Increased Genotype Mutation (Creature Stats) chance During Fertilization\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_GeneticVolatility.T_Talent_Genetic_GeneticVolatility",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 1000
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Journeyman",
+                  "requiredTalents": [
+                    "Genetics_GenotypeMutation"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGeneticsMutationChance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGeneticsMutationChance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureGeneticsMutationChance_%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_PhenotypeMutation": {
+                  "id": "Genetics_PhenotypeMutation",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_PhenotypeMutation-DisplayName\", \"Visual Anomaly\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_PhenotypeMutation-Description\", \"Increased Phenotype Mutation (Color Coatings) chance During Fertilization\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_VisualAnomaly.T_Talent_Genetic_VisualAnomaly",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Apprentice",
+                  "requiredTalents": [
+                    "Genetics_Mutation_Reroute"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureCosmeticMutationChance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureCosmeticMutationChance_%\")",
+                          "value": 4
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureCosmeticMutationChance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_RecoverySpeed": {
+                  "id": "Genetics_RecoverySpeed",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_RecoverySpeed-DisplayName\", \"Bounce Back\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_RecoverySpeed-Description\", \"Fertilization Recovery Speed is Increased after Fertilization or Gestation\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_BounceBack.T_Talent_Genetic_BounceBack",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_Reroute2"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureFertilizationRecoverySpeed_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureFertilizationRecoverySpeed_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureFertilizationRecoverySpeed_+%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_Twins": {
+                  "id": "Genetics_Twins",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_Twins-DisplayName\", \"Seeing Double\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_Twins-Description\", \"Chance for Tamed Creatures to Birth Twins\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_SeeingDouble.T_Talent_Genetic_SeeingDouble",
+                  "extraData": null,
+                  "position": {
+                    "x": 200,
+                    "y": 1450
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Master",
+                  "requiredTalents": [
+                    "Genetics_Reroute2"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureTwinBirthChance_%\")",
+                          "value": 15
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureTwinBirthChance_%\")",
+                          "value": 30
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_GestationBuff": {
+                  "id": "Genetics_GestationBuff",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_GestationBuff-DisplayName\", \"Hormones\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_GestationBuff-Description\", \"During Gestation, Creatures gain Increased Damage Resistance\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_Hormones.T_Talent_Genetic_Hormones",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 600
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_Reroute2"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"TamedCreatureStrongerWhileGestating_?\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_MaternalBuff": {
+                  "id": "Genetics_MaternalBuff",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_MaternalBuff-DisplayName\", \"Mother\\'s Care\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_MaternalBuff-Description\", \"Mothers will Provide Resistances and Buffs to Nearby Juveniles after Birth\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_MothersCare.T_Talent_Genetic_MothersCare",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_Reroute2"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"TamedCreatureHasMaternalInstincts_?\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_SireBuff": {
+                  "id": "Genetics_SireBuff",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_SireBuff-DisplayName\", \"Father\\'s Strength\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_SireBuff-Description\", \"Fathers gain Strength and Speed after Fertilization\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_FathersStrength.T_Talent_Genetic_FathersStrength",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 1200
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_Reroute2"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"TamedCreatureHasSireVigor_?\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_WildGenome": {
+                  "id": "Genetics_WildGenome",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_WildGenome-DisplayName\", \"Ranger\\'s Sense\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_WildGenome-Description\", \"Wild Creatures when Captured or Tamed have a chance to gain better stats\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_TraitSense.T_Talent_Genetic_TraitSense",
+                  "extraData": null,
+                  "position": {
+                    "x": 650,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_Reduced_Threat"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForBetterWildCreaturesGenetics_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForBetterWildCreaturesGenetics_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForBetterWildCreaturesGenetics_%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_PhenotypeMutation2": {
+                  "id": "Genetics_PhenotypeMutation2",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_PhenotypeMutation2-DisplayName\", \"Prime Variants\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_PhenotypeMutation2-Description\", \"Increased Phenotype Mutation (Color Coatings) chance During Fertilization\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_PrimedVariant.T_Talent_Genetic_PrimedVariant",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 1000
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Journeyman",
+                  "requiredTalents": [
+                    "Genetics_PhenotypeMutation"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureCosmeticMutationChance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureCosmeticMutationChance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureCosmeticMutationChance_%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_WildPhenome": {
+                  "id": "Genetics_WildPhenome",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_WildPhenome-DisplayName\", \"Hunter\\'s Eye\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_WildPhenome-Description\", \"Wild Creatures when Captured or Tamed have a chance to gain rare colors\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_CoatHunter.T_Talent_Genetic_CoatHunter",
+                  "extraData": null,
+                  "position": {
+                    "x": 650,
+                    "y": 850
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Journeyman",
+                  "requiredTalents": [
+                    "Genetics_WildGenome"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForRarerWildCreaturesCosmetics_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForRarerWildCreaturesCosmetics_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForRarerWildCreaturesCosmetics_%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_Mutation_Reroute": {
+                  "id": "Genetics_Mutation_Reroute",
+                  "treeId": "Construction_Genetics",
+                  "type": "Reroute",
+                  "display": "Genetics_Mutation_Reroute",
+                  "description": "",
+                  "icon": null,
+                  "extraData": null,
+                  "position": {
+                    "x": 400,
+                    "y": 450
+                  },
+                  "size": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_Experience"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": true,
+                  "drawMethod": "XThenY",
+                  "rewards": []
+                },
+                "Genetics_Experience": {
+                  "id": "Genetics_Experience",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_Experience-DisplayName\", \"Guided Growth\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_Experience-Description\", \"Tamed Creatures will gain more Experience\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_GuidedGrowth.T_Talent_Genetic_GuidedGrowth",
+                  "extraData": null,
+                  "position": {
+                    "x": 400,
+                    "y": 250
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_Reduced_Threat",
+                    "Genetics_GestationSpeed"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureExperience_+%\")",
+                          "value": 3
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureExperience_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureExperience_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_Reroute2": {
+                  "id": "Genetics_Reroute2",
+                  "treeId": "Construction_Genetics",
+                  "type": "Reroute",
+                  "display": "Genetics_Reroute2",
+                  "description": "",
+                  "icon": null,
+                  "extraData": null,
+                  "position": {
+                    "x": 200,
+                    "y": 200
+                  },
+                  "size": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_GestationSpeed"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": true,
+                  "drawMethod": "YThenX",
+                  "rewards": []
+                },
+                "Genetics_Reduced_Threat": {
+                  "id": "Genetics_Reduced_Threat",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_Reduced_Threat-DisplayName\", \"Beast Whisperer\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_Reduced_Threat-Description\", \"Reduced Aggression from Wild Creatures\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_BeastWhisperers.T_Talent_Genetic_BeastWhisperers",
+                  "extraData": null,
+                  "position": {
+                    "x": 550,
+                    "y": 50
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAnimalThreatModifier_+%\")",
+                          "value": -3
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAnimalThreatModifier_+%\")",
+                          "value": -5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAnimalThreatModifier_+%\")",
+                          "value": -10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_Lineage": {
+                  "id": "Genetics_Lineage",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_Lineage-DisplayName\", \"Forced Evolution\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_Lineage-Description\", \"Increased Bloodline Mutation (Creature Growth Trait) chance During Fertilization\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Genetics/T_Talent_Genetic_ForcedEvo.T_Talent_Genetic_ForcedEvo",
+                  "extraData": null,
+                  "position": {
+                    "x": 400,
+                    "y": 1450
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Master",
+                  "requiredTalents": [
+                    "Genetics_Reroute3"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureLineageMutationChance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseTamedCreatureLineageMutationChance_%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Genetics_Reroute3": {
+                  "id": "Genetics_Reroute3",
+                  "treeId": "Construction_Genetics",
+                  "type": "Reroute",
+                  "display": "Genetics_Reroute3",
+                  "description": "",
+                  "icon": null,
+                  "extraData": null,
+                  "position": {
+                    "x": 400,
+                    "y": 1250
+                  },
+                  "size": {
+                    "x": 0,
+                    "y": 0
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Genetics_PhenotypeMutation2",
+                    "Genetics_GenotypeMutation2"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": true,
+                  "drawMethod": "YThenX",
+                  "rewards": []
+                },
+                "Genetics_WildBloodline": {
+                  "id": "Genetics_WildBloodline",
+                  "treeId": "Construction_Genetics",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Genetics_WildBloodline-DisplayName\", \"Scout\\'s Intuition\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Genetics_WildBloodline-Description\", \"Wild Creatures when Captured or Tamed have a chance to gain rarer Bloodlines\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Wolf_BleedOnHit.T_Talent_Wolf_BleedOnHit",
+                  "extraData": null,
+                  "position": {
+                    "x": 650,
+                    "y": 1450
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": "Master",
+                  "requiredTalents": [
+                    "Genetics_WildPhenome"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForStrongerWildCreaturesLineages_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseChanceForStrongerWildCreaturesLineages_%\")",
+                          "value": 25
                         }
                       ],
                       "flags": []
@@ -11811,7 +12681,7 @@
                   "treeId": "Combat_Blades",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Knife_Instant_Kill-DisplayName\", \"Killer Throw\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Knife_Instant_Kill-Description\", \"Chance to instantly kill non-boss targets with a sneak attack from a thrown knife.\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Knife_Instant_Kill-Description\", \"Chance to instantly kill non-boss targets with a sneak attack from a thrown knife\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Blades/Talent_Blades_DeadlyThrow.Talent_Blades_DeadlyThrow",
                   "extraData": null,
                   "position": {
@@ -14304,7 +15174,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Moa-DisplayName\", \"Moa\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/Bestiary_Moa.Bestiary_Moa",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/T_Bestiary_Moa.T_Bestiary_Moa",
           "requiredLevel": 0,
           "trees": {
             "Creature_Moa": {
@@ -14573,7 +15443,7 @@
                   "treeId": "Creature_Moa",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_Moa-DisplayName\", \"Moa\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_Moa-Description\", \"Can be specialized into further speed, or to become more well rounded.\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_Moa-Description\", \"Can be specialized into further speed, or to become more well-rounded.\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Moa.T_Talent_Base_Moa",
                   "extraData": null,
                   "position": {
@@ -15707,7 +16577,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Buffalo-DisplayName\", \"Buffalo\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/Bestiary_JuvenileBuffalo.Bestiary_JuvenileBuffalo",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/T_Bestiary_BuffaloJuvie.T_Bestiary_BuffaloJuvie",
           "requiredLevel": 0,
           "trees": {
             "Creature_Buffalo": {
@@ -17090,7 +17960,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Tusker-DisplayName\", \"Tusker\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/Bestiary_Tusker.Bestiary_Tusker",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/T_Bestiary_Tusker.T_Bestiary_Tusker",
           "requiredLevel": 0,
           "trees": {
             "Creature_Tusker": {
@@ -18481,7 +19351,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Terrenus-DisplayName\", \"Terrenus\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Grasslands/Bestiary_Terranus.Bestiary_Terranus",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Grasslands/T_Bestiary_Terrenus.T_Bestiary_Terrenus",
           "requiredLevel": 0,
           "trees": {
             "Creature_Terrenus": {
@@ -18688,7 +19558,7 @@
                   "treeId": "Creature_Terrenus",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Horse_StaminaRegenWhenHit-DisplayName\", \"The Final Quarter\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Horse_StaminaRegenWhenHit-Description\", \"Increases Health Regeneration, at max rank grants Stamina Regeneration when damaged\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Horse_StaminaRegenWhenHit-Description\", \"Increases Health Regeneration, at max rank grants Double Stamina Regeneration when damaged\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Horse_StaminaRegenWhenHit.T_Talent_Horse_StaminaRegenWhenHit",
                   "extraData": null,
                   "position": {
@@ -19122,7 +19992,7 @@
                   "treeId": "Creature_Terrenus",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_Horse-DisplayName\", \"Terrenus\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_Horse-Description\", \"Can be specialized into speed, or to become more well rounded.\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_Horse-Description\", \"Can be specialized into speed, or to become more well-rounded.\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Horse.T_Talent_Base_Horse",
                   "extraData": null,
                   "position": {
@@ -19950,7 +20820,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Wolf-DisplayName\", \"Wolf\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/Bestiary_PackWolf.Bestiary_PackWolf",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/T_Bestiary_PackWolf.T_Bestiary_PackWolf",
           "requiredLevel": 0,
           "trees": {
             "Creature_Wolf": {
@@ -20823,7 +21693,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Snow_Wolf-DisplayName\", \"Snow Wolf\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/Bestiary_SnowWolf.Bestiary_SnowWolf",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/T_Bestiary_SnowWolf.T_Bestiary_SnowWolf",
           "requiredLevel": 0,
           "trees": {
             "Creature_Snow_Wolf": {
@@ -21703,7 +22573,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Desert_Wolf-DisplayName\", \"Hyena\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Desert/Bestiary_DC_Wolf.Bestiary_DC_Wolf",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Desert/T_Bestiary_DesertWolf.T_Bestiary_DesertWolf",
           "requiredLevel": 0,
           "trees": {
             "Creature_Desert_Wolf": {
@@ -22580,7 +23450,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Boar-DisplayName\", \"Boar\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/Bestiary_WildBoar.Bestiary_WildBoar",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/T_Bestiary_WildBoar.T_Bestiary_WildBoar",
           "requiredLevel": 0,
           "trees": {
             "Creature_Boar": {
@@ -23453,7 +24323,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Sheep-DisplayName\", \"Sheep\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/Sheep_HB_MED.Sheep_HB_MED",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Sheep.T_Bestiary_Sheep",
           "requiredLevel": 0,
           "trees": {
             "Creature_Sheep": {
@@ -24326,7 +25196,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Chicken-DisplayName\", \"Chicken\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Conifer/Chicken_HB_SML.Chicken_HB_SML",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Chickens.T_Bestiary_Chickens",
           "requiredLevel": 0,
           "trees": {
             "Creature_Chicken": {
@@ -25199,7 +26069,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Rooster-DisplayName\", \"Rooster\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/Chicken_Rooster_Chick_HB_SML.Chicken_Rooster_Chick_HB_SML",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Chickens.T_Bestiary_Chickens",
           "requiredLevel": 0,
           "trees": {
             "Creature_Rooster": {
@@ -25450,7 +26320,7 @@
                   "treeId": "Creature_Rooster",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"CombatPet_Base_Rooster-DisplayName\", \"Rooster\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"CombatPet_Base_Rooster-Description\", \"Can be specialized into further egg laying bonuses, or grown for feasting.\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"CombatPet_Base_Rooster-Description\", \"Can be specialized into aura bonuses or become more well-rounded.\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Rooster.T_Talent_Base_Rooster",
                   "extraData": null,
                   "position": {
@@ -26080,7 +26950,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Horse-DisplayName\", \"Horse\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/Horse_HB_LRG.Horse_HB_LRG",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Horse.T_Bestiary_Horse",
           "requiredLevel": 0,
           "trees": {
             "Creature_Horse": {
@@ -26295,7 +27165,7 @@
                   "treeId": "Creature_Horse",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Horse_StaminaRegenWhenHitStandard-DisplayName\", \"The Final Quarter\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Horse_StaminaRegenWhenHitStandard-Description\", \"Increases Health Regeneration, at max rank grants Stamina Regeneration when damaged\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Horse_StaminaRegenWhenHitStandard-Description\", \"Increases Health Regeneration, at max rank grants Double Stamina Regeneration when damaged\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Horse_StaminaRegenWhenHit.T_Talent_Horse_StaminaRegenWhenHit",
                   "extraData": null,
                   "position": {
@@ -26729,7 +27599,7 @@
                   "treeId": "Creature_Horse",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_HorseStandard-DisplayName\", \"Horse\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_HorseStandard-Description\", \"Can be specialized into endurance, speed, or to become more well rounded.\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Base_HorseStandard-Description\", \"Can be specialized into endurance, speed, or to become more well-rounded.\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_HorseNormal.T_Talent_Base_HorseNormal",
                   "extraData": null,
                   "position": {
@@ -27557,7 +28427,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Cat-DisplayName\", \"Cat\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/Cat_HB_SML.Cat_HB_SML",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Cat.T_Bestiary_Cat",
           "requiredLevel": 0,
           "trees": {
             "Creature_Cat": {
@@ -28454,7 +29324,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Dog-DisplayName\", \"Dog\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/Dogs_HB_MED.Dogs_HB_MED",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Dogs.T_Bestiary_Dogs",
           "requiredLevel": 0,
           "trees": {
             "Creature_Dog": {
@@ -29335,7 +30205,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Zebra-DisplayName\", \"Zebra\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Desert/Bestiary_Zebra.Bestiary_Zebra",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Desert/T_Bestiary_Zebra.T_Bestiary_Zebra",
           "requiredLevel": 0,
           "trees": {
             "Creature_Zebra": {
@@ -30702,7 +31572,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Swamp_Quadruped-DisplayName\", \"Stryder\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Swamp/Bestiary_DeerSnail.Bestiary_DeerSnail",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Swamp/T_Bestiary_SwampQuad.T_Bestiary_SwampQuad",
           "requiredLevel": 0,
           "trees": {
             "Creature_Swamp_Quadruped": {
@@ -32093,7 +32963,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Blueback-DisplayName\", \"Blueback\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Grasslands/Bestiary_Blueback.Bestiary_Blueback",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Grasslands/T_Bestiary_Blueback.T_Bestiary_Blueback",
           "requiredLevel": 0,
           "trees": {
             "Creature_Blueback": {
@@ -33488,7 +34358,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_WoolyZebra-DisplayName\", \"Shaggy Zebra\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/Bestiary_WoolyZebra.Bestiary_WoolyZebra",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/T_Bestiary_WoolyZebra.T_Bestiary_WoolyZebra",
           "requiredLevel": 0,
           "trees": {
             "Creature_WoolyZebra": {
@@ -34855,7 +35725,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_ArcticMoa-DisplayName\", \"Arctic Moa\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/Bestiary_Arctic_Moa.Bestiary_Arctic_Moa",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/T_Bestiary_ArcticMoa.T_Bestiary_ArcticMoa",
           "requiredLevel": 0,
           "trees": {
             "Creature_ArcticMoa": {
@@ -36246,7 +37116,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Cow-DisplayName\", \"Cow\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/Cow_Bull_Calf_HB_LRG.Cow_Bull_Calf_HB_LRG",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Cattle.T_Bestiary_Cattle",
           "requiredLevel": 0,
           "trees": {
             "Creature_Cow": {
@@ -37119,7 +37989,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_SwampBird-DisplayName\", \"Ubis\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Swamp/Bestiary_SwampBird.Bestiary_SwampBird",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Swamp/T_Bestiary_SwampBird.T_Bestiary_SwampBird",
           "requiredLevel": 0,
           "trees": {
             "Creature_SwampBird": {
@@ -37136,7 +38006,7 @@
                   "treeId": "Creature_SwampBird",
                   "type": null,
                   "display": "NSLOCTEXT(\"D_Talents\", \"Creature_SwampBird-DisplayName\", \"Ubis\")",
-                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_SwampBird-Description\", \"Ubis Talent Tree\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_SwampBird-Description\", \"Can be specialized into attack bonuses, resistances and hauling bonuses.\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_SwampBird_TEMP.T_Talent_Base_SwampBird_TEMP",
                   "extraData": null,
                   "position": {
@@ -38432,7 +39302,7 @@
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_WoollyMammoth-DisplayName\", \"Woolly Mammoth\")",
           "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
-          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/Bestiary_Mammoth.Bestiary_Mammoth",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Arctic/T_Bestiary_Mammoth.T_Bestiary_Mammoth",
           "requiredLevel": 0,
           "trees": {
             "Creature_WoollyMammoth": {
@@ -39631,6 +40501,2097 @@
                         {
                           "rawKey": "(Value=\"BaseMountHeavyCargoSlots_+\")",
                           "value": 3
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Creature_Bull": {
+          "id": "Creature_Bull",
+          "modelId": "Creature",
+          "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Bull-DisplayName\", \"Bull\")",
+          "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
+          "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Workshop/T_Bestiary_Cattle.T_Bestiary_Cattle",
+          "requiredLevel": 0,
+          "trees": {
+            "Creature_Bull": {
+              "id": "Creature_Bull",
+              "archetypeId": "Creature_Bull",
+              "display": "NSLOCTEXT(\"D_TalentTrees\", \"Creature_Bull-DisplayName\", \"Bull\")",
+              "icon": "/Game/Assets/2DArt/UI/Icons/MapIcons/T_Icon_Map_Bull.T_Icon_Map_Bull",
+              "background": null,
+              "firstRank": "Novice",
+              "requiredLevel": 0,
+              "talents": {
+                "Creature_Bull_Health": {
+                  "id": "Creature_Bull_Health",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Health-DisplayName\", \"Wild Fortitude\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Health-Description\", \"Increased Maximum Health\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Health.T_Talent_Base_Health",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_SlowResistance": {
+                  "id": "Creature_Bull_SlowResistance",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_SlowResistance-DisplayName\", \"Riding Forward\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_SlowResistance-Description\", \"Increased Slow Resistance\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_SlowResistance.T_Talent_Base_SlowResistance",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_DamageReduction"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseSlowResistance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseSlowResistance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseSlowResistance_%\")",
+                          "value": 20
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseSlowResistance_%\")",
+                          "value": 40
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_WeightCapacity": {
+                  "id": "Creature_Bull_WeightCapacity",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_WeightCapacity-DisplayName\", \"Strong Back\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_WeightCapacity-Description\", \"Increased Weight Capacity\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_WeightCapacity.T_Talent_Base_WeightCapacity",
+                  "extraData": null,
+                  "position": {
+                    "x": 700,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWeightCapacity_+%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWeightCapacity_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWeightCapacity_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWeightCapacity_+%\")",
+                          "value": 20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_Base": {
+                  "id": "Creature_Bull_Base",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Base-DisplayName\", \"Bull\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Base-Description\", \"Can be specialized into offensive and defensive roles.\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Bull.T_Talent_Base_Bull",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": true,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [],
+                      "flags": [
+                        {
+                          "RowName": "None",
+                          "DataTableName": "D_CharacterFlags"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "Creature_Bull_Stamina": {
+                  "id": "Creature_Bull_Stamina",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Stamina-DisplayName\", \"Natural Endurance\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Stamina-Description\", \"Increased Maximum Stamina\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Stamina.T_Talent_Base_Stamina",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumStamina_+%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumStamina_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumStamina_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumStamina_+%\")",
+                          "value": 20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_HealthRegeneration": {
+                  "id": "Creature_Bull_HealthRegeneration",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_HealthRegeneration-DisplayName\", \"Nurtured Recovery\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_HealthRegeneration-Description\", \"Increased Health Regeneration\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_HealthRegeneration.T_Talent_Base_HealthRegeneration",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Health"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 15
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 30
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 60
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_FoodSlot": {
+                  "id": "Creature_Bull_FoodSlot",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_FoodSlot-DisplayName\", \"Large Stomach\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_FoodSlot-Description\", \"Increases Food Buff Effectiveness and allows an additional Food Buff\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_FoodSlot.T_Talent_Base_FoodSlot",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_ReducedWaterUsage"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFruitAndVegeModifierEffectiveness_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFruitAndVegeModifierEffectiveness_+%\")",
+                          "value": 12
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFruitAndVegeModifierEffectiveness_+%\")",
+                          "value": 15
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseMaximumStomachFullness_+\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_StaminaRegeneration": {
+                  "id": "Creature_Bull_StaminaRegeneration",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_StaminaRegeneration-DisplayName\", \"Roaming Vitality\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_StaminaRegeneration-Description\", \"Reduced Stamina Cost, at Max rank grants Increased Stamina Regeneration\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_StaminaRegeneration.T_Talent_Base_StaminaRegeneration",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_SecondaryAttack"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseStaminaActionCost_+%\")",
+                          "value": -10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseStaminaActionCost_+%\")",
+                          "value": -20
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseStaminaActionCost_+%\")",
+                          "value": -30
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseStaminaActionCost_+%\")",
+                          "value": -50
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseStaminaRegen_+%\")",
+                          "value": 50
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_ReducedWaterUsage": {
+                  "id": "Creature_Bull_ReducedWaterUsage",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_ReducedWaterUsage-DisplayName\", \"Hydration Elasticity \")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_ReducedWaterUsage-Description\", \"Reduced Water Consumption\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_ReducedWaterUsage.T_Talent_Base_ReducedWaterUsage",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Stamina"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_FoodBuffDuration": {
+                  "id": "Creature_Bull_FoodBuffDuration",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_FoodBuffDuration-DisplayName\", \"Protector\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_FoodBuffDuration-Description\", \"Provides an Aura to Nearby Gestating Creatures Which Increases Gestation Speed\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Spears/Talent_Spear_StrongThrust2.Talent_Spear_StrongThrust2",
+                  "extraData": null,
+                  "position": {
+                    "x": 900,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_BleedOnHit"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"GrantedAuraProtectorTalent_?\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_InventorySlots": {
+                  "id": "Creature_Bull_InventorySlots",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_InventorySlots-DisplayName\", \"Balanced Pack\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_InventorySlots-Description\", \"Increased Inventory Slots\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_InventorySlots.T_Talent_Base_InventorySlots",
+                  "extraData": null,
+                  "position": {
+                    "x": 700,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_WeightCapacity"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMountCargoSlots_+\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMountCargoSlots_+\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMountCargoSlots_+\")",
+                          "value": 4
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_DamageReduction_2": {
+                  "id": "Creature_Bull_DamageReduction_2",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_DamageReduction_2-DisplayName\", \"Tough as Leather\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_DamageReduction_2-Description\", \"Increased Physical Damage Reduction\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_DamageReduction.T_Talent_Base_DamageReduction",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_DamageReduction"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_Jumping": {
+                  "id": "Creature_Bull_Jumping",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Jumping-DisplayName\", \"Springful Step\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Jumping-Description\", \"Reduced Jumping Stamina Cost\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Jumping.T_Talent_Base_Jumping",
+                  "extraData": null,
+                  "position": {
+                    "x": 900,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_InventorySlots"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseJumpingStaminaActionCost_+%\")",
+                          "value": -5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseJumpingStaminaActionCost_+%\")",
+                          "value": -10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseJumpingStaminaActionCost_+%\")",
+                          "value": -20
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseJumpingStaminaActionCost_+%\")",
+                          "value": -40
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_MovementSpeed": {
+                  "id": "Creature_Bull_MovementSpeed",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_MovementSpeed-DisplayName\", \"Racing Ready\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_MovementSpeed-Description\", \"Increased Movement Speed\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Speed.T_Talent_Speed",
+                  "extraData": null,
+                  "position": {
+                    "x": 900,
+                    "y": 100
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_InventorySlots"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMovementSpeed_+%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMovementSpeed_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMovementSpeed_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_FireResist": {
+                  "id": "Creature_Bull_FireResist",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_FireResist-DisplayName\", \"Flaming Defiance\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_FireResist-Description\", \"Increased Fire and Heat Resistance\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Buffalo_FireResist.T_Talent_Buffalo_FireResist",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_SlowResistance"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFireDamageResistance_+%\")",
+                          "value": 10
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseHeatResistance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFireDamageResistance_+%\")",
+                          "value": 20
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseHeatResistance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFireDamageResistance_+%\")",
+                          "value": 40
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseHeatResistance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_Weaken": {
+                  "id": "Creature_Bull_Weaken",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Weaken-DisplayName\", \"Thump Thump\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_Weaken-Description\", \"Attacks Cause Blunt Trauma\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Buffalo_Weaken.T_Talent_Buffalo_Weaken",
+                  "extraData": null,
+                  "position": {
+                    "x": 700,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_SecondaryAttack"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAttacksCauseBluntTrauma_%\")",
+                          "value": 15
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAttacksCauseBluntTrauma_%\")",
+                          "value": 40
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAttacksCauseBluntTrauma_%\")",
+                          "value": 80
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_ExtraCarry": {
+                  "id": "Creature_Bull_ExtraCarry",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_ExtraCarry-DisplayName\", \"Cargo Hauling\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_ExtraCarry-Description\", \"Increased Inventory Slots, at max rank grants an additional Bulky Slot\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Buffalo_ExtraCarry.T_Talent_Buffalo_ExtraCarry",
+                  "extraData": null,
+                  "position": {
+                    "x": 700,
+                    "y": 100
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_InventorySlots"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMountCargoSlots_+\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMountCargoSlots_+\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMountCargoSlots_+\")",
+                          "value": 3
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseMountHeavyCargoSlots_+\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_DamageReduction": {
+                  "id": "Creature_Bull_DamageReduction",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_DamageReduction-DisplayName\", \"Thick Hide\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_DamageReduction-Description\", \"Increased Physical Damage Reduction\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Buffalo_DamageReduction.T_Talent_Buffalo_DamageReduction",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Health"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_ReducedFoodConsumption": {
+                  "id": "Creature_Bull_ReducedFoodConsumption",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_ReducedFoodConsumption-DisplayName\", \"Metabolic Preservation\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_ReducedFoodConsumption-Description\", \"Reduced Food Usage, Increased Food Effects Duration, at Max Rank Grazing Enabled\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_ReducedFoodConsumption.T_Talent_Base_ReducedFoodConsumption",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 100
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_ReducedWaterUsage"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -2
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -5
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -10
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -20
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 20
+                        },
+                        {
+                          "rawKey": "(Value=\"IsMountGrazingEnabled_?\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_SecondaryAttack": {
+                  "id": "Creature_Bull_SecondaryAttack",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_SecondaryAttack-DisplayName\", \"Raging Bull\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_SecondaryAttack-Description\", \"Adds Ability to Perform a Charging Attack\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_CombatPetDamage.T_Talent_Base_CombatPetDamage",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"IsMountSecondaryAttackEnabled_?\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_BleedOnHit": {
+                  "id": "Creature_Bull_BleedOnHit",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_BleedOnHit-DisplayName\", \"Full Gore\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_BleedOnHit-Description\", \"Attacks Cause Bleed\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Wolf_BleedOnHit.T_Talent_Wolf_BleedOnHit",
+                  "extraData": null,
+                  "position": {
+                    "x": 900,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_Weaken"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAttacksCauseBleed_%\")",
+                          "value": 15
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAttacksCauseBleed_%\")",
+                          "value": 40
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAttacksCauseBleed_%\")",
+                          "value": 80
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Bull_MeleeDamage": {
+                  "id": "Creature_Bull_MeleeDamage",
+                  "treeId": "Creature_Bull",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_MeleeDamage-DisplayName\", \"Barn Yard Bully\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Bull_MeleeDamage-Description\", \"Increased Melee Damage\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Moa_Attack.T_Talent_Moa_Attack",
+                  "extraData": null,
+                  "position": {
+                    "x": 700,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Bull_BleedOnHit"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMeleeDamage_+%\")",
+                          "value": 25
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMeleeDamage_+%\")",
+                          "value": 75
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMeleeDamage_+%\")",
+                          "value": 250
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "Creature_Pig": {
+          "id": "Creature_Pig",
+          "modelId": "Creature",
+          "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Pig-DisplayName\", \"Pig\")",
+          "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
+          "background": null,
+          "requiredLevel": 0,
+          "trees": {
+            "Creature_Pig": {
+              "id": "Creature_Pig",
+              "archetypeId": "Creature_Pig",
+              "display": "NSLOCTEXT(\"D_TalentTrees\", \"Creature_Pig-DisplayName\", \"Pig\")",
+              "icon": "/Game/Assets/2DArt/UI/Icons/MapIcons/T_Icon_Map_Boar.T_Icon_Map_Boar",
+              "background": null,
+              "firstRank": "Novice",
+              "requiredLevel": 0,
+              "talents": {
+                "Creature_Pig_Base": {
+                  "id": "Creature_Pig_Base",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Base-DisplayName\", \"Pig\")",
+                  "description": "",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_TALENT_Base_Pig.T_TALENT_Base_Pig",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": true,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [],
+                      "flags": [
+                        {
+                          "RowName": "None",
+                          "DataTableName": "D_CharacterFlags"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "Creature_Pig_FoodBuffDuration": {
+                  "id": "Creature_Pig_FoodBuffDuration",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_FoodBuffDuration-DisplayName\", \"Perfect Pasturage\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_FoodBuffDuration-Description\", \"Increased Food Effects Duration and Cold Resistance\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_FoodBuffDuration.T_Talent_Base_FoodBuffDuration",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 100
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Health",
+                    "Creature_Pig_HealthRegen"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 2
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseColdResistance_%\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 5
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseColdResistance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 10
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseColdResistance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodModifierDuration_+%\")",
+                          "value": 20
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseColdResistance_%\")",
+                          "value": 10
+                        },
+                        {
+                          "rawKey": "(Value=\"IsMountGrazingEnabled_?\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_BaconFromSkinning": {
+                  "id": "Creature_Pig_BaconFromSkinning",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_BaconFromSkinning-DisplayName\", \"Bacon Nation\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_BaconFromSkinning-Description\", \"Increases Bacon Yield from Skinning\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Blades/Talent_Blades_DeadlyThrow.Talent_Blades_DeadlyThrow",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_HealthRegen",
+                    "Creature_Pig_FoodConsumption"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseSkinningRewards_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseSkinningRewards_%\")",
+                          "value": 20
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseSkinningRewards_%\")",
+                          "value": 30
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_ReducedWaterHeatResist": {
+                  "id": "Creature_Pig_ReducedWaterHeatResist",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_ReducedWaterHeatResist-DisplayName\", \"Hydration Elasticity \")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_ReducedWaterHeatResist-Description\", \"Reduced Water Consumption and Increased Heat Resistance\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_ReducedWaterUsage.T_Talent_Base_ReducedWaterUsage",
+                  "extraData": null,
+                  "position": {
+                    "x": 900,
+                    "y": 100
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Health",
+                    "Creature_Pig_Coziness"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -2
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseHeatResistance_%\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -5
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseHeatResistance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -10
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseHeatResistance_%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseWaterConsumption_+%\")",
+                          "value": -20
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseHeatResistance_%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_Health": {
+                  "id": "Creature_Pig_Health",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Health-DisplayName\", \"Wild Fortitude\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Health-Description\", \"Increased Maximum Health\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Health.T_Talent_Base_Health",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 300
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseMaximumHealth_+%\")",
+                          "value": 20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_HealthRegen": {
+                  "id": "Creature_Pig_HealthRegen",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_HealthRegen-DisplayName\", \"Nurtured Recovery\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_HealthRegen-Description\", \"Increased Health Regeneration\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_HealthRegeneration.T_Talent_Base_HealthRegeneration",
+                  "extraData": null,
+                  "position": {
+                    "x": 300,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 15
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 30
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseHealthRegen_+%\")",
+                          "value": 60
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_Coziness": {
+                  "id": "Creature_Pig_Coziness",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Coziness-DisplayName\", \"Calming Presence\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Coziness-Description\", \"Increase Coziness Bonus\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Buffalo_FireResist.T_Talent_Buffalo_FireResist",
+                  "extraData": null,
+                  "position": {
+                    "x": 700,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseComfortLevel_+\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseComfortLevel_+\")",
+                          "value": 6
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseComfortLevel_+\")",
+                          "value": 12
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseComfortLevel_+\")",
+                          "value": 20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_CropGrowthYield": {
+                  "id": "Creature_Pig_CropGrowthYield",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_CropGrowthYield-DisplayName\", \"Pink Thumb\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_CropGrowthYield-Description\", \"Improves Nearby Crop Growth Speed and Yield\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Cooking/Talent_Cooking_EfficientCrops.Talent_Cooking_EfficientCrops",
+                  "extraData": null,
+                  "position": {
+                    "x": 900,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Coziness"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"GrantedAuraCropGrowthYield_?\")",
+                          "value": 1
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseCropGrowthYieldRadius_+\")",
+                          "value": 350
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"GrantedAuraCropGrowthYield_?\")",
+                          "value": 1
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseCropGrowthYieldRadius_+\")",
+                          "value": 500
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"GrantedAuraCropGrowthYield_?\")",
+                          "value": 1
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseCropGrowthYieldRadius_+\")",
+                          "value": 750
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_DamageResist": {
+                  "id": "Creature_Pig_DamageResist",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_DamageResist-DisplayName\", \"Tough as Leather\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_DamageResist-Description\", \"Increased Physical Damage Reduction\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_DamageReduction.T_Talent_Base_DamageReduction",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 100
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Health"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 4
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 8
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BasePhysicalDamageResistance_%\")",
+                          "value": 15
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_FoodConsumption": {
+                  "id": "Creature_Pig_FoodConsumption",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_FoodConsumption-DisplayName\", \"Metabolic Preservation\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_FoodConsumption-Description\", \"Reduced Food Usage\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_ReducedFoodConsumption.T_Talent_Base_ReducedFoodConsumption",
+                  "extraData": null,
+                  "position": {
+                    "x": 500,
+                    "y": 700
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_Base"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -2
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFoodConsumption_+%\")",
+                          "value": -20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_FruitVegEffect": {
+                  "id": "Creature_Pig_FruitVegEffect",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_FruitVegEffect-DisplayName\", \"Large Stomach\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_FruitVegEffect-Description\", \"Increases Food Buff Effectiveness and allows an additional Food Buff\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_FoodSlot.T_Talent_Base_FoodSlot",
+                  "extraData": null,
+                  "position": {
+                    "x": 900,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_FoodConsumption",
+                    "Creature_Pig_Coziness"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "ShortestDistance",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFruitAndVegeModifierEffectiveness_+%\")",
+                          "value": 3
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFruitAndVegeModifierEffectiveness_+%\")",
+                          "value": 7
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFruitAndVegeModifierEffectiveness_+%\")",
+                          "value": 12
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseFruitAndVegeModifierEffectiveness_+%\")",
+                          "value": 15
+                        },
+                        {
+                          "rawKey": "(Value=\"BaseMaximumStomachFullness_+\")",
+                          "value": 1
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_Threat": {
+                  "id": "Creature_Pig_Threat",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Threat-DisplayName\", \"Soft Hoofed\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Threat-Description\", \"Reduced Animal Threat\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Wolf_MarkOnHit.T_Talent_Wolf_MarkOnHit",
+                  "extraData": null,
+                  "position": {
+                    "x": 400,
+                    "y": 900
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_FoodConsumption"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "YThenX",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAnimalThreatModifier_+%\")",
+                          "value": -5
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAnimalThreatModifier_+%\")",
+                          "value": -10
+                        }
+                      ],
+                      "flags": []
+                    },
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"BaseAnimalThreatModifier_+%\")",
+                          "value": -20
+                        }
+                      ],
+                      "flags": []
+                    }
+                  ]
+                },
+                "Creature_Pig_Truffles": {
+                  "id": "Creature_Pig_Truffles",
+                  "treeId": "Creature_Pig",
+                  "type": null,
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Truffles-DisplayName\", \"Truffleupagus\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Pig_Truffles-Description\", \"Occasionally Dig Up Truffles While Idle\")",
+                  "icon": "/Game/Assets/2DArt/UI/Talents/Exploration/Talent_Exploration_CalmingPresence.Talent_Exploration_CalmingPresence",
+                  "extraData": null,
+                  "position": {
+                    "x": 100,
+                    "y": 500
+                  },
+                  "size": {
+                    "x": 128,
+                    "y": 128
+                  },
+                  "requiredRank": null,
+                  "requiredTalents": [
+                    "Creature_Pig_HealthRegen"
+                  ],
+                  "requiredFlags": [],
+                  "forbiddenFlags": [],
+                  "defaultUnlocked": false,
+                  "drawMethod": "XThenY",
+                  "rewards": [
+                    {
+                      "effects": [
+                        {
+                          "rawKey": "(Value=\"WillDiscoverTruffles_?\")",
+                          "value": 1
                         }
                       ],
                       "flags": []

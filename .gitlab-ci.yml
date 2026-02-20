@@ -1,0 +1,31 @@
+image: node:20-bookworm
+
+stages:
+  - deploy
+
+cache:
+  key:
+    files:
+      - talent-app/package-lock.json
+  paths:
+    - talent-app/node_modules/
+
+pages:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+  script:
+    - cd talent-app
+    - npm ci
+    - export VITE_BASE_PATH="${CI_PAGES_URL}/talents/"
+    - npm run build
+    - cd ..
+    - rm -rf public
+    - mkdir -p public/talents
+    - cp -a talent-app/dist/. public/talents/
+    - cp index.html public/index.html
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
