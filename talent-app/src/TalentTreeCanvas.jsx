@@ -264,22 +264,30 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
 
               const isHovered = hoveredTalentId === talent.id || hoveredTalentId === reqId
               const isRequirementFulfilled = (skilledTalents[reqId] ?? 0) > 0
-              const waypoints = requirement.viaTalentIds
+              const viaTalents = requirement.viaTalentIds
                 .map((viaTalentId) => talentMap[viaTalentId])
                 .filter(Boolean)
-                .map((viaTalent) => {
-                  const viaPos = worldToContainer(viaTalent.position?.x ?? 0, viaTalent.position?.y ?? 0)
-                  return {
-                    x: viaPos.x + scaleValue(viaTalent.size?.x ?? 128) / 2,
-                    y: viaPos.y + scaleValue(viaTalent.size?.y ?? 128) / 2
-                  }
-                })
+
+              const waypoints = viaTalents.map((viaTalent) => {
+                const viaPos = worldToContainer(viaTalent.position?.x ?? 0, viaTalent.position?.y ?? 0)
+                return {
+                  x: viaPos.x + scaleValue(viaTalent.size?.x ?? 128) / 2,
+                  y: viaPos.y + scaleValue(viaTalent.size?.y ?? 128) / 2
+                }
+              })
+
+              // Per-segment draw methods: first segment uses the child talent's
+              // method, subsequent segments use each reroute waypoint's method
+              const segmentMethods = [
+                resolveEdgeMethod(talent.drawMethod),
+                ...viaTalents.map((vt) => resolveEdgeMethod(vt.drawMethod))
+              ]
 
               const edgePath = buildEdgePathWithWaypoints({
                 fromCenter,
                 toCenter,
                 waypoints,
-                method: resolveEdgeMethod(talent.drawMethod)
+                segmentMethods
               })
 
               return (
@@ -313,6 +321,17 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
           const talentIconSrc = resolveAssetImagePath(talent.icon)
           const rankIconSrc = resolveAssetImagePath(rankData?.icon)
           const progressPercent = (currentRank / maxRanks) * 100
+          const isBlueprintNode = modelId === 'Blueprint'
+
+          // Determine prerequisite badge flags for blueprint nodes
+          const requiredFlags = Array.isArray(talent.requiredFlags) ? talent.requiredFlags : []
+          const dlcFlag = requiredFlags.find((f) => f?.DataTableName === 'D_DLCPackageData')
+          const hasDlcRequirement = !!dlcFlag
+          const hasMissionRequirement = requiredFlags.some((f) =>
+            f?.DataTableName === 'D_AccountFlags' || f?.DataTableName === 'D_CharacterFlags'
+          )
+          const featureLevelIconSrc = isBlueprintNode ? resolveAssetImagePath(talent.featureLevelIcon) : null
+          const dlcIconSrc = dlcFlag?.dlcIcon ? resolveAssetImagePath(dlcFlag.dlcIcon) : null
 
           return (
             <div
@@ -360,11 +379,34 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
                 </div>
               )}
 
-              {/* Rank badge (top-left) */}
-              <div className={`rank-badge ${isAvailableUnskilled ? 'available' : (isSkilled ? 'invested' : 'locked')}`}>{currentRank}/{maxRanks}</div>
+              {/* Feature-level badge (top-left inside) – which expansion introduced this blueprint */}
+              {featureLevelIconSrc && (
+                <img
+                  src={featureLevelIconSrc}
+                  alt=""
+                  className="expansion-node-badge"
+                  onError={(e) => { e.target.style.display = 'none' }}
+                />
+              )}
 
-              {/* Rank icon badge (top-right) */}
-              {rankIconSrc && (
+              {/* Status badge (top-right for blueprints) / Rank badge (top-left for talents) */}
+              {isBlueprintNode ? (
+                <img
+                  src={isSkilled
+                    ? resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Unlocked_Normal.png')
+                    : isAvailableUnskilled
+                      ? resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Available_Normal.png')
+                      : resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Locked_Normal.png')
+                  }
+                  alt={isSkilled ? '✓' : (isAvailableUnskilled ? '○' : '🔒')}
+                  className="blueprint-status-badge"
+                />
+              ) : (
+                <div className={`rank-badge ${isAvailableUnskilled ? 'available' : (isSkilled ? 'invested' : 'locked')}`}>{currentRank}/{maxRanks}</div>
+              )}
+
+              {/* Rank icon badge (top-right) – only for non-blueprint models */}
+              {!isBlueprintNode && rankIconSrc && (
                 <img
                   src={rankIconSrc}
                   alt=""
@@ -373,6 +415,30 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
                     e.target.style.display = 'none'
                   }}
                 />
+              )}
+
+              {/* DLC requirement badge (bottom-left) */}
+              {isBlueprintNode && hasDlcRequirement && dlcIconSrc && (
+                <div className="dlc-node-badge">
+                  <img src={dlcIconSrc} alt="DLC" className="dlc-node-badge-icon" />
+                </div>
+              )}
+
+              {/* Mission / operation requirement badge (bottom-left, offset if DLC badge present) */}
+              {isBlueprintNode && hasMissionRequirement && (
+                <img
+                  src={resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Icons/T_Icon_Star.png')}
+                  alt="★"
+                  className={`mission-node-badge ${hasDlcRequirement ? 'with-dlc' : ''}`}
+                />
+              )}
+
+              {/* Blueprint name label below the node */}
+              {isBlueprintNode && (
+                <div className="blueprint-node-label">
+                  {resolveI18nText(talent.itemDetails?.display, localeStrings, null)
+                    || resolveI18nText(talent.display, localeStrings, talent.id)}
+                </div>
               )}
 
               {/* Tooltip */}
@@ -426,12 +492,13 @@ function buildEdgePath({ fromCenter, method, toCenter }) {
   return `M ${fromCenter.x} ${fromCenter.y} L ${fromCenter.x} ${toCenter.y} L ${toCenter.x} ${toCenter.y}`
 }
 
-function buildEdgePathWithWaypoints({ fromCenter, method, toCenter, waypoints }) {
+function buildEdgePathWithWaypoints({ fromCenter, toCenter, waypoints, segmentMethods }) {
   const points = [...(waypoints ?? []), toCenter]
   let currentPoint = fromCenter
 
   return points
-    .map((nextPoint) => {
+    .map((nextPoint, index) => {
+      const method = segmentMethods?.[index] ?? DEFAULT_EDGE_METHOD
       const segmentPath = buildEdgePath({ fromCenter: currentPoint, method, toCenter: nextPoint })
       currentPoint = nextPoint
       return segmentPath
@@ -453,9 +520,8 @@ function TalentTooltip({ talent, currentRank, localeStrings, skilledTalents, mou
   const isMultiBlueprint = isBlueprint && recipes.length > 1
   const isSingleBlueprint = isBlueprint && recipes.length === 1
 
-  // For blueprints: the display name should be the item name (properly resolved)
-  // For single-item: use itemDisplayName, for multi: use talent display name
-  const blueprintTitle = isSingleBlueprint
+  // For blueprints: prefer the localized item name, fall back to talent display
+  const blueprintTitle = isBlueprint
     ? (itemDisplayName || prettifyId(title))
     : prettifyId(title)
 
@@ -558,31 +624,26 @@ function TalentTooltip({ talent, currentRank, localeStrings, skilledTalents, mou
         {aggregatedArmourStats && (
           <div className="tooltip-armour-summary">
             <div className="armour-summary-header">Set Armor Stats (all pieces):</div>
-            {Object.entries(aggregatedArmourStats).map(([statName, value]) => (
-              <div key={statName} className="armour-stat-row">
-                <span className="armour-stat-name">{statName}</span>
-                <span className="armour-stat-value">{value > 0 ? '+' : ''}{value}{statName.includes('%') ? '%' : ''}</span>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Prerequisites */}
-        {effectiveRequiredTalentIds?.length > 0 && (
-          <div className="tooltip-prerequisites">
-            <div className="label">Prerequisites (any one):</div>
-            {effectiveRequiredTalentIds.map((reqId) => {
-              const reqTalent = talentMap[reqId]
-              const reqName = resolveI18nText(reqTalent?.display, localeStrings, reqId)
-              const isMet = (skilledTalents?.[reqId] ?? 0) > 0
+            {aggregatedArmourStats.map(({ rawKey, total }) => {
+              const { name, isPercent } = localizeStatName(rawKey, localeStrings)
               return (
-                <div key={reqId} className={`prerequisite ${isMet ? 'met' : 'unmet'}`}>
-                  {prettifyId(reqName)}
+                <div key={rawKey} className="armour-stat-row">
+                  <span className="armour-stat-name">{name}</span>
+                  <span className="armour-stat-value">{total > 0 ? '+' : ''}{total}{isPercent ? '%' : ''}</span>
                 </div>
               )
             })}
           </div>
         )}
+
+        {/* Other prerequisites: feature level, DLC, flags */}
+        <BlueprintPrerequisites
+          talent={talent}
+          localeStrings={localeStrings}
+          talentMap={talentMap}
+          skilledTalents={skilledTalents}
+          effectiveRequiredTalentIds={effectiveRequiredTalentIds}
+        />
       </div>
     )
   }
@@ -855,29 +916,141 @@ function prettifyId(text) {
   return text.replace(/_/g, ' ')
 }
 
-function cleanStatName(rawKey) {
-  // Parse "(Value=\"BaseFoo_%\")" → "BaseFoo"
-  const match = rawKey.match(/Value="([^"]+)"/)
-  const statId = match ? match[1] : rawKey
-  // Strip trailing _%, _+%, etc.
-  return statId.replace(/[_]?[+-]?%?$/, '').replace(/^Base/, '')
-}
-
 function aggregateArmourStats(recipes) {
+  const order = []
   const totals = {}
-  const nameMap = {}
   for (const recipe of recipes) {
     if (!recipe.armourStats) continue
     for (const [rawKey, value] of Object.entries(recipe.armourStats)) {
-      const cleanName = cleanStatName(rawKey)
-      if (!nameMap[cleanName]) {
-        nameMap[cleanName] = rawKey
-        totals[cleanName] = 0
+      if (!(rawKey in totals)) {
+        order.push(rawKey)
+        totals[rawKey] = 0
       }
-      totals[cleanName] += value
+      totals[rawKey] += value
     }
   }
-  return Object.keys(totals).length > 0 ? totals : null
+  if (order.length === 0) return null
+  return order.map((rawKey) => ({ rawKey, total: totals[rawKey] }))
+}
+
+function localizeStatName(rawKey, localeStrings) {
+  // rawKey is like '(Value="BasePhysicalDamageResistance_%")'
+  const match = rawKey.match(/Value="([^"]+)"/)
+  const statId = match ? match[1] : rawKey
+  const isPercent = statId.includes('%')
+
+  // Look up PositiveDescription → "+{0} Physical Resistance" or "+{0}% Cold Resistance"
+  const template = localeStrings?.[`${statId}-PositiveDescription`]
+    || localeStrings?.[`D_Stats:${statId}-PositiveDescription`]
+    || ''
+
+  if (template) {
+    // Strip leading +/- and {0}/%  to get just the name
+    const name = template.replace(/^[+-]?\{0\}%?\s*/, '').trim()
+    if (name) return { name, isPercent }
+  }
+
+  // Fallback: strip Value wrapper, Base prefix, trailing _%, etc.
+  const fallback = statId.replace(/[_]?[+-]?%?$/, '').replace(/^Base/, '')
+  return { name: prettifyId(fallback), isPercent }
+}
+
+function BlueprintPrerequisites({ talent, localeStrings, talentMap, skilledTalents, effectiveRequiredTalentIds }) {
+  const requiredFlags = Array.isArray(talent.requiredFlags) ? talent.requiredFlags : []
+  const featureLevel = talent.requiredFeatureLevel
+
+  const flagEntries = requiredFlags
+    .filter((f) => f?.RowName && f.RowName !== 'None')
+    .map((f) => {
+      const table = f.DataTableName || ''
+      const rowName = f.RowName
+      if (table === 'D_DLCPackageData') {
+        const dlcName = localeStrings?.[`${rowName}-DLCName`]
+          || localeStrings?.[`D_DLCPackageData:${rowName}-DLCName`]
+          || prettifyId(rowName)
+        return { key: `dlc-${rowName}`, label: `Requires DLC: ${dlcName}`, type: 'dlc' }
+      }
+      if (table === 'D_CharacterFlags') {
+        // Enriched: show which talent grants this flag
+        if (f.grantedBy) {
+          const talentName = resolveI18nText(f.grantedBy.display, localeStrings, null)
+            || prettifyId(f.grantedBy.talentId)
+          return { key: `flag-${rowName}`, label: `Requires Talent: ${prettifyId(talentName)}`, type: 'talent-flag' }
+        }
+        const desc = localeStrings?.[`${rowName}-Description`]
+          || localeStrings?.[`D_CharacterFlags:${rowName}-Description`]
+          || null
+        return { key: `flag-${rowName}`, label: desc || `Mission: ${prettifyId(rowName)}`, type: 'mission' }
+      }
+      if (table === 'D_AccountFlags') {
+        // Enriched: show the mission(s) that reward this flag
+        const missions = Array.isArray(f.missions) ? f.missions : []
+        if (missions.length > 0) {
+          const missionLabels = missions.map((mId) => {
+            const dropName = localeStrings?.[`${mId}-DropName`]
+              || localeStrings?.[`D_ProspectList:${mId}-DropName`]
+              || null
+            const desc = localeStrings?.[`${mId}-Description`]
+              || localeStrings?.[`D_ProspectList:${mId}-Description`]
+              || null
+            if (dropName && desc) return `${dropName} — ${desc}`
+            if (dropName) return dropName
+            if (desc) return desc
+            return prettifyId(mId)
+          })
+          return { key: `acct-${rowName}`, label: `Mission: ${missionLabels.join(', ')}`, type: 'account' }
+        }
+        const clean = rowName.replace(/^GrantedBlueprint_/, '').replace(/^GrantedTalent_/, '')
+        return { key: `acct-${rowName}`, label: `Unlocked: ${prettifyId(clean)}`, type: 'account' }
+      }
+      return { key: `flag-${rowName}`, label: prettifyId(rowName), type: 'unknown' }
+    })
+
+  let featureEntry = null
+  if (featureLevel) {
+    const dlcName = localeStrings?.[`${featureLevel}-DLCName`]
+      || localeStrings?.[`D_DLCPackageData:${featureLevel}-DLCName`]
+      || null
+    // Try underscore-separated variant (DangerousHorizons → Dangerous_Horizons)
+    const underscored = featureLevel.replace(/([a-z])([A-Z])/g, '$1_$2')
+    const dlcNameAlt = !dlcName
+      ? (localeStrings?.[`${underscored}-DLCName`]
+        || localeStrings?.[`D_DLCPackageData:${underscored}-DLCName`]
+        || null)
+      : null
+    const displayName = dlcName || dlcNameAlt || prettifyId(featureLevel)
+    featureEntry = { key: `feat-${featureLevel}`, label: `Added in: ${displayName}`, type: 'expansion' }
+  }
+
+  const hasPrereqs = effectiveRequiredTalentIds?.length > 0 || flagEntries.length > 0 || featureEntry
+  if (!hasPrereqs) return null
+
+  return (
+    <div className="tooltip-prerequisites">
+      {featureEntry && (
+        <div className="prerequisite expansion">{featureEntry.label}</div>
+      )}
+      {flagEntries.map((entry) => (
+        <div key={entry.key} className={`prerequisite ${entry.type}`}>{entry.label}</div>
+      ))}
+      {effectiveRequiredTalentIds?.length > 0 && (
+        <>
+          <div className="label">Prerequisites (any one):</div>
+          {effectiveRequiredTalentIds.map((reqId) => {
+            const reqTalent = talentMap[reqId]
+            const reqName = resolveI18nText(reqTalent?.itemDetails?.display, localeStrings, null)
+              || resolveI18nText(reqTalent?.display, localeStrings, reqId)
+            const isMet = (skilledTalents?.[reqId] ?? 0) > 0
+            return (
+              <div key={reqId} className={`prerequisite ${isMet ? 'met' : 'unmet'}`}>
+                {prettifyId(reqName)}
+              </div>
+            )
+          })}
+        </>
+      )}
+    </div>
+  )
 }
 
 function formatList(values) {
@@ -1076,7 +1249,7 @@ function parseNsLoc(value) {
     return null
   }
 
-  const match = value.match(/NSLOCTEXT\("([^"]+)",\s*"([^"]+)",\s*"([^"]*)"\)/)
+  const match = value.match(/NSLOCTEXT\("([^"]+)",\s*"([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)/)
   if (!match) {
     return null
   }
@@ -1084,7 +1257,7 @@ function parseNsLoc(value) {
   return {
     category: match[1],
     key: match[2],
-    text: match[3]
+    text: match[3].replace(/\\(["'])/g, '$1')
   }
 }
 

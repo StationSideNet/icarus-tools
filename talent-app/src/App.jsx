@@ -3399,7 +3399,7 @@ function parseNsLoc(value) {
     return null
   }
 
-  const match = value.match(/NSLOCTEXT\("([^"]+)",\s*"([^"]+)",\s*"([^"]*)"\)/)
+  const match = value.match(/NSLOCTEXT\("([^"]+)",\s*"([^"]+)",\s*"((?:[^"\\]|\\.)*)"\)/)
   if (!match) {
     return null
   }
@@ -3407,7 +3407,7 @@ function parseNsLoc(value) {
   return {
     category: match[1],
     key: match[2],
-    text: match[3]
+    text: match[3].replace(/\\(["'])/g, '$1')
   }
 }
 

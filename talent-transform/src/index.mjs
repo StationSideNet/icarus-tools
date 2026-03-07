@@ -25,7 +25,19 @@ const EXTRA_RUNTIME_ASSET_PATHS = [
   "/Game/Assets/2DArt/UI/Icons/Icon_RenCurrency.Icon_RenCurrency",
   "/Game/Assets/2DArt/UI/Icons/Icon_Speed.Icon_Speed",
   "/Game/Assets/2DArt/UI/Icons/Icon_AggressiveCreature.Icon_AggressiveCreature",
-  "/Game/Assets/2DArt/UI/Icons/T_Icon_Homestead.T_Icon_Homestead"
+  "/Game/Assets/2DArt/UI/Icons/T_Icon_Homestead.T_Icon_Homestead",
+  // Blueprint node overlay icons
+  "/Game/Assets/2DArt/UI/Icons/Padlock_Symbol.Padlock_Symbol",
+  "/Game/Assets/2DArt/UI/Icons/T_Icon_Star.T_Icon_Star",
+  "/Game/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Locked_Normal.BlueprintCount_Locked_Normal",
+  "/Game/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Unlocked_Normal.BlueprintCount_Unlocked_Normal",
+  "/Game/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Available_Normal.BlueprintCount_Available_Normal",
+  // Feature-level icons
+  "/Game/Assets/2DArt/UI/Icons/T_FeatureLevelIcon_NewFrontiers3.T_FeatureLevelIcon_NewFrontiers3",
+  "/Game/Assets/2DArt/UI/Icons/FeatureLevel/T_FeatureLevel_GH.T_FeatureLevel_GH",
+  "/Game/Assets/2DArt/UI/Icons/FeatureLevel/T_FeatureLevel_DH.T_FeatureLevel_DH",
+  // DLC default icon
+  "/Game/Assets/2DArt/UI/Icons/T_ICON_Money_Symbol_Double.T_ICON_Money_Symbol_Double"
 ];
 
 const args = process.argv.slice(2);
@@ -63,6 +75,9 @@ async function main() {
   const recipeSetsFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Crafting", "D_RecipeSets.json")]);
   const mountsFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "AI", "D_Mounts.json")]);
   const playerTalentModifierFile = await resolveExistingFile(gameExportDir, ["Talents/D_PlayerTalentModifiers.json"]);
+  const accountFlagsFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Flags", "D_AccountFlags.json")]);
+  const featureLevelsFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Development", "D_FeatureLevels.json")]);
+  const dlcPackageFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "DLC", "D_DLCPackageData.json")]);
   const defaultGameIniFile = await resolveExistingFile(gameExportDir, ["Icarus/Config/DefaultGame.ini"]);
   const contentSourceDir = await resolveExistingDir(gameExportDir, ["Icarus/Content"]);
   const localizationSourceDir = await resolveExistingDir(gameExportDir, ["Icarus/Content/Localization/Game"]);
@@ -85,7 +100,14 @@ async function main() {
   const recipeSetsData = recipeSetsFile ? await readJson(recipeSetsFile) : null;
   const mountsData = mountsFile ? await readJson(mountsFile) : null;
   const playerTalentModifiersData = await readJson(playerTalentModifierFile);
+  const accountFlagsData = accountFlagsFile ? await readJson(accountFlagsFile) : null;
+  const featureLevelsData = featureLevelsFile ? await readJson(featureLevelsFile) : null;
+  const dlcPackageData = dlcPackageFile ? await readJson(dlcPackageFile) : null;
   const projectVersion = await readProjectVersion(defaultGameIniFile);
+
+  if (!accountFlagsFile) {
+    console.warn("Flags/D_AccountFlags.json not found. Account flag mission enrichment will be skipped.");
+  }
 
   if (!mountsFile) {
     console.warn("D_Mounts.json not found. Creature mount icon overrides were skipped.");
@@ -122,6 +144,41 @@ async function main() {
   });
   const blueprints = buildTalents(talentsData, blueprintTrees, blueprintEnrichmentResolver);
 
+  // Build account flag → missions lookup from D_AccountFlags
+  const accountFlagMissions = buildAccountFlagMissionMap(accountFlagsData);
+
+  // Build character flag → granting talent reverse lookup from all talent rewards
+  const charFlagSources = buildCharacterFlagSourceMap(talents);
+  const charFlagSourcesBlueprint = buildCharacterFlagSourceMap(blueprints);
+  // Merge both (talents are the primary source, blueprints as fallback)
+  for (const [flag, source] of Object.entries(charFlagSourcesBlueprint)) {
+    if (!charFlagSources[flag]) {
+      charFlagSources[flag] = source;
+    }
+  }
+
+  // Enrich requiredFlags on blueprint talents with mission / talent source data
+  enrichRequiredFlags(blueprints, accountFlagMissions, charFlagSources);
+
+  // Build feature-level and DLC icon lookup maps
+  const featureLevelIcons = buildFeatureLevelIconMap(featureLevelsData, dlcPackageData);
+  const dlcIcons = buildDlcIconMap(dlcPackageData);
+
+  // Enrich blueprint talents with feature-level icon and DLC icons
+  enrichBlueprintIcons(blueprints, featureLevelIcons, dlcIcons);
+
+  const enrichStats = { accountFlagsEnriched: 0, charFlagsEnriched: 0, featureLevelIcons: 0, dlcIcons: 0 };
+  for (const talent of Object.values(blueprints)) {
+    for (const flag of talent.requiredFlags ?? []) {
+      if (flag.missions?.length) enrichStats.accountFlagsEnriched++;
+      if (flag.grantedBy) enrichStats.charFlagsEnriched++;
+      if (flag.dlcIcon) enrichStats.dlcIcons++;
+    }
+    if (talent.featureLevelIcon) enrichStats.featureLevelIcons++;
+  }
+  console.log(`  Flag enrichment: ${enrichStats.accountFlagsEnriched} account flags with missions, ${enrichStats.charFlagsEnriched} character flags with granting talent`);
+  console.log(`  Icon enrichment: ${enrichStats.featureLevelIcons} feature-level icons, ${enrichStats.dlcIcons} DLC icons`);
+
   const talentOutput = {
     schemaVersion: 4,
     generatedAt: new Date().toISOString(),
@@ -156,10 +213,6 @@ async function main() {
 
   const talentIconCoverage = summarizeIconCoverage(talentOutput);
   const blueprintIconCoverage = summarizeIconCoverage(blueprintOutput);
-  const missingIconSlots = [
-    ...collectMissingIconSlots(talentOutput, "Talents"),
-    ...collectMissingIconSlots(blueprintOutput, "Blueprints/TechTree")
-  ];
 
   logIconCoverageSummary("Talents", talentIconCoverage);
   logIconCoverageSummary("Blueprints/TechTree", blueprintIconCoverage);
@@ -167,12 +220,6 @@ async function main() {
   if (blueprintIconCoverage.talentsMissingIcon > 0) {
     console.warn(
       `Blueprint icon coverage warning: ${blueprintIconCoverage.talentsMissingIcon} talents have no resolved icon.`
-    );
-  }
-
-  if (missingIconSlots.length > 0) {
-    console.warn(
-      `\n=== MISSING ICON SLOTS ===\nDetected icon fields without values across datasets: ${missingIconSlots.length}\n${renderMissingIconSlotsTree(missingIconSlots)}\n`
     );
   }
 
@@ -724,6 +771,166 @@ function normalizeRewards(rewards = []) {
   });
 }
 
+/**
+ * Build a map from account flag name → list of mission IDs that reward it.
+ * e.g. "GrantedBlueprint_SC_Rod" → ["STYX_C_Fishing"]
+ */
+function buildAccountFlagMissionMap(accountFlagsData) {
+  const map = {};
+  if (!accountFlagsData) return map;
+
+  for (const row of accountFlagsData.Rows ?? []) {
+    const name = row?.Name;
+    if (!name) continue;
+
+    const missions = (row.RewardedFromMissions ?? [])
+      .map((ref) => ref?.RowName)
+      .filter(Boolean);
+
+    if (missions.length > 0) {
+      map[name] = missions;
+    }
+  }
+
+  return map;
+}
+
+/**
+ * Build a reverse map from character flag name → the talent that grants it.
+ * Scans all talent rewards for GrantedFlags referencing D_CharacterFlags.
+ * e.g. "Talent_Ghillie_Armor" → { talentId: "Stalking_Blueprint_Ghillie", display: "..." }
+ */
+function buildCharacterFlagSourceMap(talents) {
+  const map = {};
+
+  for (const [talentId, talent] of Object.entries(talents)) {
+    for (const reward of talent.rewards ?? []) {
+      for (const flag of reward.flags ?? []) {
+        if (flag.DataTableName === 'D_CharacterFlags' && flag.RowName) {
+          if (!map[flag.RowName]) {
+            map[flag.RowName] = {
+              talentId,
+              display: talent.display,
+              treeId: talent.treeId
+            };
+          }
+        }
+      }
+    }
+  }
+
+  return map;
+}
+
+/**
+ * Enrich requiredFlags entries on blueprint talents with mission and talent source data.
+ * Mutates the talent objects in place.
+ */
+function enrichRequiredFlags(blueprints, accountFlagMissions, charFlagSources) {
+  for (const talent of Object.values(blueprints)) {
+    if (!Array.isArray(talent.requiredFlags)) continue;
+
+    talent.requiredFlags = talent.requiredFlags.map((flag) => {
+      if (!flag?.RowName) return flag;
+
+      const table = flag.DataTableName || '';
+
+      if (table === 'D_AccountFlags') {
+        const missions = accountFlagMissions[flag.RowName];
+        if (missions?.length) {
+          return { ...flag, missions };
+        }
+      }
+
+      if (table === 'D_CharacterFlags') {
+        const source = charFlagSources[flag.RowName];
+        if (source) {
+          return { ...flag, grantedBy: source };
+        }
+      }
+
+      return flag;
+    });
+  }
+}
+
+/**
+ * Build a map of featureLevelName → Unreal icon path.
+ * First uses icons from D_FeatureLevels, then fills gaps by finding a DLC
+ * whose RequiredFeatureLevel matches and borrowing its icon.
+ */
+function buildFeatureLevelIconMap(featureLevelsData, dlcPackageData) {
+  const map = {};
+
+  // Primary: icons defined directly on the feature level
+  for (const row of featureLevelsData?.Rows ?? []) {
+    const name = row?.Name;
+    const icon = normalizeNone(row?.Icon);
+    if (name && icon) {
+      map[name] = icon;
+    }
+  }
+
+  // Fallback: for feature levels without icons, find a DLC that requires that feature level
+  for (const row of dlcPackageData?.Rows ?? []) {
+    const featureLevel = row?.Metadata?.RequiredFeatureLevel?.RowName;
+    const icon = normalizeNone(row?.Icon);
+    if (featureLevel && icon && !map[featureLevel]) {
+      map[featureLevel] = icon;
+    }
+  }
+
+  return map;
+}
+
+/**
+ * Build a map of dlcRowName → Unreal icon path from D_DLCPackageData.
+ */
+function buildDlcIconMap(dlcPackageData) {
+  const map = {};
+  for (const row of dlcPackageData?.Rows ?? []) {
+    const name = row?.Name;
+    const icon = normalizeNone(row?.Icon);
+    if (name && icon) {
+      map[name] = icon;
+    }
+  }
+  return map;
+}
+
+/**
+ * Enrich blueprint talents with featureLevelIcon and dlcIcon on DLC requiredFlags.
+ * Mutates talent objects in place.
+ */
+function enrichBlueprintIcons(blueprints, featureLevelIcons, dlcIcons) {
+  for (const talent of Object.values(blueprints)) {
+    // Check if this talent has a hard DLC requirement
+    const hasDlcRequirement = Array.isArray(talent.requiredFlags) &&
+      talent.requiredFlags.some(f => f?.DataTableName === 'D_DLCPackageData');
+
+    // Feature-level icon (top-left inside badge) — only if no hard DLC requirement
+    if (talent.requiredFeatureLevel && !hasDlcRequirement) {
+      const icon = featureLevelIcons[talent.requiredFeatureLevel];
+      if (icon) {
+        talent.featureLevelIcon = icon;
+      }
+    }
+
+    // DLC icon on each DLC requiredFlag entry
+    if (Array.isArray(talent.requiredFlags)) {
+      talent.requiredFlags = talent.requiredFlags.map((flag) => {
+        if (flag?.DataTableName === 'D_DLCPackageData' && flag.RowName) {
+          const icon = dlcIcons[flag.RowName];
+          if (icon) {
+            return { ...flag, dlcIcon: icon };
+          }
+        }
+        return flag;
+      });
+    }
+  }
+}
+
 function normalizeVector(vector) {
   if (!vector) {
     return { x: 0, y: 0 };
@@ -833,8 +1040,8 @@ function createBlueprintEnrichmentResolver({
       return { recipes };
     }
 
-    const itemableRow = itemableById[itemableId] ?? null;
-    const staticRow = staticByItemableId[itemableId] ?? null;
+    const itemableRow = ciGet(itemableById, itemableId);
+    const staticRow = ciGet(staticByItemableId, itemableId);
     const staticId = staticRow?.Name ?? null;
 
     const durableRow = getTraitRowByRef(staticRow, "Durable", durableById);
@@ -889,6 +1096,17 @@ function indexRowsByName(tableData) {
   });
 
   return byName;
+}
+
+/** Case-insensitive lookup for cross-table references where casing may not match. */
+function ciGet(index, key) {
+  if (!key) return null;
+  if (key in index) return index[key];
+  const lk = key.toLowerCase();
+  for (const k in index) {
+    if (k.toLowerCase() === lk) return index[k];
+  }
+  return null;
 }
 
 function indexItemsStaticByItemable(itemsStaticData) {
@@ -1171,83 +1389,6 @@ function logIconCoverageSummary(label, summary) {
   ];
 
   console.log(lines.join("\n"));
-}
-
-function collectMissingIconSlots(dataJson, sourceLabel) {
-  const entries = [];
-
-  Object.values(dataJson?.models ?? {}).forEach((model) => {
-    Object.values(model?.archetypes ?? {}).forEach((archetype) => {
-      if (!archetype?.icon) {
-        entries.push({
-          sourceLabel,
-          modelId: model?.id ?? "UnknownModel",
-          archetypeId: archetype?.id ?? "UnknownArchetype",
-          treeId: "",
-          nodeId: "[ArchetypeIcon]"
-        });
-      }
-
-      Object.values(archetype?.trees ?? {}).forEach((tree) => {
-        if (!tree?.icon) {
-          entries.push({
-            sourceLabel,
-            modelId: model?.id ?? "UnknownModel",
-            archetypeId: archetype?.id ?? "UnknownArchetype",
-            treeId: tree?.id ?? "UnknownTree",
-            nodeId: "[TreeIcon]"
-          });
-        }
-
-        Object.values(tree?.talents ?? {}).forEach((talent) => {
-          const hasIcon = Boolean(
-            talent?.icon
-            || talent?.itemDetails?.icon
-            || talent?.itemDetails?.glowIcon
-          );
-
-          if (!hasIcon) {
-            entries.push({
-              sourceLabel,
-              modelId: model?.id ?? "UnknownModel",
-              archetypeId: archetype?.id ?? "UnknownArchetype",
-              treeId: tree?.id ?? "UnknownTree",
-              nodeId: talent?.id ?? "UnknownTalent"
-            });
-          }
-        });
-      });
-    });
-  });
-
-  return entries;
-}
-
-function renderMissingIconSlotsTree(missingSlots = []) {
-  const rootNode = { dirs: new Map(), files: new Set() };
-
-  for (const slot of missingSlots) {
-    const parts = [
-      slot?.sourceLabel || "UnknownSource",
-      slot?.modelId || "UnknownModel",
-      slot?.archetypeId || "UnknownArchetype",
-      slot?.treeId || "NoTree"
-    ];
-
-    let node = rootNode;
-    for (const part of parts) {
-      if (!node.dirs.has(part)) {
-        node.dirs.set(part, { dirs: new Map(), files: new Set() });
-      }
-      node = node.dirs.get(part);
-    }
-
-    node.files.add(slot?.nodeId || "UnknownNode");
-  }
-
-  const lines = ["MissingIconSlots/"];
-  appendTreeLines(rootNode, "", lines);
-  return lines.join("\n");
 }
 
 function isCriticalAssetPath(unrealPath) {
