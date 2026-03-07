@@ -384,6 +384,7 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
                   skilledTalents={skilledTalents}
                   mousePos={mousePos}
                   talentMap={visibleTalentMap}
+                  modelId={modelId}
                   effectiveRequiredTalentIds={effectiveRequiredTalentIdsById[talent.id] ?? []}
                 />
               )}
@@ -438,22 +439,30 @@ function buildEdgePathWithWaypoints({ fromCenter, method, toCenter, waypoints })
     .join(' ')
 }
 
-function TalentTooltip({ talent, currentRank, localeStrings, skilledTalents, mousePos, talentMap, effectiveRequiredTalentIds }) {
+function TalentTooltip({ talent, currentRank, localeStrings, skilledTalents, mousePos, talentMap, modelId, effectiveRequiredTalentIds }) {
   const tooltipRef = useRef(null)
+  const isBlueprint = modelId === 'Blueprint'
   const title = resolveI18nText(talent.display, localeStrings, talent.id)
   const description = resolveI18nText(talent.description, localeStrings, '')
   const itemDetails = talent.itemDetails && typeof talent.itemDetails === 'object' ? talent.itemDetails : null
   const itemDisplayName = resolveI18nText(itemDetails?.display, localeStrings, '')
   const itemDescription = resolveI18nText(itemDetails?.description, localeStrings, '')
   const itemFlavor = resolveI18nText(itemDetails?.flavorText, localeStrings, '')
-  const itemCategories = Array.isArray(itemDetails?.categories) ? itemDetails.categories.filter(Boolean) : []
-  const itemTags = Array.isArray(itemDetails?.tags) ? itemDetails.tags.filter(Boolean) : []
-  const durable = itemDetails?.durable
-  const buildable = itemDetails?.buildable
-  const deployable = itemDetails?.deployable
-  const consumable = itemDetails?.consumable
-  const equippable = itemDetails?.equippable
-  const usable = itemDetails?.usable
+
+  const recipes = Array.isArray(itemDetails?.recipes) ? itemDetails.recipes : []
+  const isMultiBlueprint = isBlueprint && recipes.length > 1
+  const isSingleBlueprint = isBlueprint && recipes.length === 1
+
+  // For blueprints: the display name should be the item name (properly resolved)
+  // For single-item: use itemDisplayName, for multi: use talent display name
+  const blueprintTitle = isSingleBlueprint
+    ? (itemDisplayName || prettifyId(title))
+    : prettifyId(title)
+
+  // Armor stats summary: aggregate all armor stats across all recipes
+  const hasAnyArmour = isBlueprint && recipes.some((r) => r.armourStats)
+  const aggregatedArmourStats = hasAnyArmour ? aggregateArmourStats(recipes) : null
+
   const rewardRows = (talent.rewards ?? [])
     .map((reward, index) => {
       const rankNum = index + 1
@@ -495,6 +504,98 @@ function TalentTooltip({ talent, currentRank, localeStrings, skilledTalents, mou
     node.style.left = `${left}px`
     node.style.top = `${top}px`
   }, [mousePos])
+
+  // ── Blueprint tooltip ──
+  if (isBlueprint) {
+    return (
+      <div
+        ref={tooltipRef}
+        className="talent-tooltip-html blueprint-tooltip"
+        style={{
+          left: `${mousePos.x + 15}px`,
+          top: `${mousePos.y + 15}px`
+        }}
+      >
+        <div className="tooltip-header">
+          <div className="tooltip-title">{blueprintTitle}</div>
+        </div>
+
+        {/* Description */}
+        {isSingleBlueprint && itemDescription && (
+          <div className="tooltip-description">{itemDescription}</div>
+        )}
+        {!isSingleBlueprint && description && (
+          <div className="tooltip-description">{description}</div>
+        )}
+
+        {/* Flavor text */}
+        {isSingleBlueprint && itemFlavor && (
+          <div className="tooltip-flavor">{itemFlavor}</div>
+        )}
+
+        {/* Single item: crafted at + materials */}
+        {isSingleBlueprint && (
+          <BlueprintRecipeBlock recipe={recipes[0]} localeStrings={localeStrings} />
+        )}
+
+        {/* Multi-blueprint: list of unlocked blueprints with their recipes */}
+        {isMultiBlueprint && (
+          <div className="tooltip-blueprints">
+            <div className="blueprints-header">Unlocks {recipes.length} Blueprints:</div>
+            {recipes.map((recipe) => {
+              const recipeName = resolveI18nText(recipe.display, localeStrings, prettifyId(recipe.id))
+              return (
+                <div key={recipe.id} className="blueprint-entry">
+                  <div className="blueprint-entry-name">{recipeName}</div>
+                  <BlueprintRecipeBlock recipe={recipe} localeStrings={localeStrings} compact />
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* Armor stats summary */}
+        {aggregatedArmourStats && (
+          <div className="tooltip-armour-summary">
+            <div className="armour-summary-header">Set Armor Stats (all pieces):</div>
+            {Object.entries(aggregatedArmourStats).map(([statName, value]) => (
+              <div key={statName} className="armour-stat-row">
+                <span className="armour-stat-name">{statName}</span>
+                <span className="armour-stat-value">{value > 0 ? '+' : ''}{value}{statName.includes('%') ? '%' : ''}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Prerequisites */}
+        {effectiveRequiredTalentIds?.length > 0 && (
+          <div className="tooltip-prerequisites">
+            <div className="label">Prerequisites (any one):</div>
+            {effectiveRequiredTalentIds.map((reqId) => {
+              const reqTalent = talentMap[reqId]
+              const reqName = resolveI18nText(reqTalent?.display, localeStrings, reqId)
+              const isMet = (skilledTalents?.[reqId] ?? 0) > 0
+              return (
+                <div key={reqId} className={`prerequisite ${isMet ? 'met' : 'unmet'}`}>
+                  {prettifyId(reqName)}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  // ── Standard talent tooltip ──
+  const itemCategories = Array.isArray(itemDetails?.categories) ? itemDetails.categories.filter(Boolean) : []
+  const itemTags = Array.isArray(itemDetails?.tags) ? itemDetails.tags.filter(Boolean) : []
+  const durable = itemDetails?.durable
+  const buildable = itemDetails?.buildable
+  const deployable = itemDetails?.deployable
+  const consumable = itemDetails?.consumable
+  const equippable = itemDetails?.equippable
+  const usable = itemDetails?.usable
 
   return (
     <div 
@@ -708,6 +809,75 @@ function TalentTooltip({ talent, currentRank, localeStrings, skilledTalents, mou
       ) : null}
     </div>
   )
+}
+
+function BlueprintRecipeBlock({ recipe, localeStrings, compact = false }) {
+  if (!recipe) return null
+
+  const craftedAtNames = (recipe.craftedAt ?? [])
+    .map((station) => resolveI18nText(station.display, localeStrings, prettifyId(station.id)))
+    .filter(Boolean)
+
+  const inputs = (recipe.inputs ?? []).map((input) => ({
+    name: resolveI18nText(input.display, localeStrings, prettifyId(input.staticItemId)),
+    count: input.count
+  }))
+
+  return (
+    <div className={`blueprint-recipe ${compact ? 'compact' : ''}`}>
+      {craftedAtNames.length > 0 && (
+        <div className="recipe-crafted-at">
+          <span className="recipe-label">Crafted at:</span>{' '}
+          <span className="recipe-value">{craftedAtNames.join(', ')}</span>
+        </div>
+      )}
+      {inputs.length > 0 && (
+        <div className="recipe-materials">
+          <span className="recipe-label">Materials:</span>
+          <div className="recipe-material-list">
+            {inputs.map((input, i) => (
+              <span key={i} className="recipe-material">
+                {input.count}× {input.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function prettifyId(text) {
+  if (!text || typeof text !== 'string') return text ?? ''
+  // If it looks like a proper display name (contains spaces or is NSLOCTEXT), return as-is
+  if (text.includes(' ') || text.includes('NSLOCTEXT')) return text
+  // Convert Foo_Bar_Baz → Foo Bar Baz
+  return text.replace(/_/g, ' ')
+}
+
+function cleanStatName(rawKey) {
+  // Parse "(Value=\"BaseFoo_%\")" → "BaseFoo"
+  const match = rawKey.match(/Value="([^"]+)"/)
+  const statId = match ? match[1] : rawKey
+  // Strip trailing _%, _+%, etc.
+  return statId.replace(/[_]?[+-]?%?$/, '').replace(/^Base/, '')
+}
+
+function aggregateArmourStats(recipes) {
+  const totals = {}
+  const nameMap = {}
+  for (const recipe of recipes) {
+    if (!recipe.armourStats) continue
+    for (const [rawKey, value] of Object.entries(recipe.armourStats)) {
+      const cleanName = cleanStatName(rawKey)
+      if (!nameMap[cleanName]) {
+        nameMap[cleanName] = rawKey
+        totals[cleanName] = 0
+      }
+      totals[cleanName] += value
+    }
+  }
+  return Object.keys(totals).length > 0 ? totals : null
 }
 
 function formatList(values) {

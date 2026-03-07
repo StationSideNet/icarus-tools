@@ -58,6 +58,9 @@ async function main() {
   const consumableFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Traits", "D_Consumable.json")]);
   const equippableFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Traits", "D_Equippable.json")]);
   const usableFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Traits", "D_Usable.json")]);
+  const armourFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Traits", "D_Armour.json")]);
+  const recipesFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Crafting", "D_ProcessorRecipes.json")]);
+  const recipeSetsFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "Crafting", "D_RecipeSets.json")]);
   const mountsFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "AI", "D_Mounts.json")]);
   const playerTalentModifierFile = await resolveExistingFile(gameExportDir, ["Talents/D_PlayerTalentModifiers.json"]);
   const defaultGameIniFile = await resolveExistingFile(gameExportDir, ["Icarus/Config/DefaultGame.ini"]);
@@ -77,6 +80,9 @@ async function main() {
   const consumableData = consumableFile ? await readJson(consumableFile) : null;
   const equippableData = equippableFile ? await readJson(equippableFile) : null;
   const usableData = usableFile ? await readJson(usableFile) : null;
+  const armourData = armourFile ? await readJson(armourFile) : null;
+  const recipesData = recipesFile ? await readJson(recipesFile) : null;
+  const recipeSetsData = recipeSetsFile ? await readJson(recipeSetsFile) : null;
   const mountsData = mountsFile ? await readJson(mountsFile) : null;
   const playerTalentModifiersData = await readJson(playerTalentModifierFile);
   const projectVersion = await readProjectVersion(defaultGameIniFile);
@@ -109,7 +115,10 @@ async function main() {
     deployableData,
     consumableData,
     equippableData,
-    usableData
+    usableData,
+    armourData,
+    recipesData,
+    recipeSetsData
   });
   const blueprints = buildTalents(talentsData, blueprintTrees, blueprintEnrichmentResolver);
 
@@ -741,7 +750,10 @@ function createBlueprintEnrichmentResolver({
   deployableData,
   consumableData,
   equippableData,
-  usableData
+  usableData,
+  armourData,
+  recipesData,
+  recipeSetsData
 }) {
   const itemableById = indexRowsByName(itemableData);
   const staticById = indexRowsByName(itemsStaticData);
@@ -752,14 +764,73 @@ function createBlueprintEnrichmentResolver({
   const consumableById = indexRowsByName(consumableData);
   const equippableById = indexRowsByName(equippableData);
   const usableById = indexRowsByName(usableData);
+  const armourById = indexRowsByName(armourData);
+  const recipeSetById = indexRowsByName(recipeSetsData);
+  const recipesByRequirement = indexRecipesByRequirement(recipesData);
+
+  function resolveRecipes(talentId) {
+    const recipeRows = recipesByRequirement[talentId] ?? [];
+    return recipeRows.map((recipe) => {
+      const craftedAt = (recipe.RecipeSets ?? [])
+        .map((ref) => {
+          const setId = ref?.RowName;
+          if (!setId || setId === "None") return null;
+          const setRow = recipeSetById[setId];
+          return {
+            id: setId,
+            display: setRow?.RecipeSetName ?? setId
+          };
+        })
+        .filter(Boolean);
+
+      const inputs = (recipe.Inputs ?? []).map((input) => {
+        const staticItemId = input?.Element?.RowName;
+        if (!staticItemId || staticItemId === "None") return null;
+        const staticRow = staticById[staticItemId];
+        const itemableId = normalizeRefRowName(staticRow?.Itemable);
+        const itemableRow = itemableId ? itemableById[itemableId] : null;
+        return {
+          staticItemId,
+          display: itemableRow?.DisplayName ?? staticItemId,
+          count: Number.isFinite(Number(input?.Count)) ? Number(input.Count) : 1
+        };
+      }).filter(Boolean);
+
+      const outputStaticId = recipe.Outputs?.[0]?.Element?.RowName;
+      const outputStaticRow = outputStaticId ? staticById[outputStaticId] : null;
+      const outputItemableId = normalizeRefRowName(outputStaticRow?.Itemable);
+      const outputItemableRow = outputItemableId ? itemableById[outputItemableId] : null;
+
+      // Resolve armor stats from output item
+      const armourRef = normalizeRefRowName(outputStaticRow?.Armour);
+      const armourRow = armourRef ? armourById[armourRef] : null;
+      const armourStats = armourRow ? normalizeStatMap(armourRow.ArmourStats ?? {}) : null;
+      const armourType = armourRow?.ArmourType ?? null;
+
+      return {
+        id: recipe.Name,
+        display: outputItemableRow?.DisplayName ?? recipe.Name,
+        craftedAt,
+        inputs,
+        armourStats: Object.keys(armourStats ?? {}).length > 0 ? armourStats : null,
+        armourType
+      };
+    });
+  }
 
   return (talentRow) => {
+    const talentId = talentRow?.Name;
     const itemableId = talentRow?.ExtraData?.DataTableName === "D_Itemable"
       ? talentRow?.ExtraData?.RowName ?? null
       : null;
 
+    // Resolve recipes for this talent (works for both single and multi-item talents)
+    const recipes = resolveRecipes(talentId);
+
     if (!itemableId) {
-      return null;
+      // Multi-blueprint talent (no single item) — return recipes only
+      if (recipes.length === 0) return null;
+      return { recipes };
     }
 
     const itemableRow = itemableById[itemableId] ?? null;
@@ -798,7 +869,8 @@ function createBlueprintEnrichmentResolver({
       deployable: extractDeployableDetails(deployableRow),
       consumable: extractConsumableDetails(consumableRow),
       equippable: extractEquippableDetails(equippableRow),
-      usable: extractUsableDetails(usableRow)
+      usable: extractUsableDetails(usableRow),
+      recipes
     };
   };
 }
@@ -833,6 +905,21 @@ function indexItemsStaticByItemable(itemsStaticData) {
   });
 
   return byItemableId;
+}
+
+function indexRecipesByRequirement(recipesData) {
+  const rows = recipesData?.Rows ?? [];
+  const byRequirement = {};
+
+  rows.forEach((row) => {
+    if (row?.bForceDisableRecipe) return;
+    const reqId = row?.Requirement?.RowName;
+    if (!reqId || reqId === "None") return;
+    if (!byRequirement[reqId]) byRequirement[reqId] = [];
+    byRequirement[reqId].push(row);
+  });
+
+  return byRequirement;
 }
 
 function normalizeRefRowName(value) {
