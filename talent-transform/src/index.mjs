@@ -27,107 +27,117 @@ const EXTRA_RUNTIME_ASSET_PATHS = [
 
 const args = process.argv.slice(2);
 const options = parseArgs(args);
+main().catch(handleFatalError);
 
-const gameExportDir = options.gameExport ?? DEFAULT_GAME_EXPORT_DIR;
-const outPath = options.out ?? DEFAULT_OUT_PATH;
-const appPublicDir = options.appPublic ?? DEFAULT_APP_PUBLIC_DIR;
+async function main() {
+  const gameExportDir = options.gameExport ?? DEFAULT_GAME_EXPORT_DIR;
+  const outPath = options.out ?? DEFAULT_OUT_PATH;
+  const appPublicDir = options.appPublic ?? DEFAULT_APP_PUBLIC_DIR;
 
-const rankFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentRanks.json", "D_TalentRanks.json"]);
-const modelFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentModels.json", "D_TalentModels.json"]);
-const archetypeFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentArchetypes.json", "D_TalentArchetypes.json"]);
-const treeFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentTrees.json", "D_TalentTrees.json"]);
-const talentFile = await resolveExistingFile(gameExportDir, ["Talents/D_Talents.json", "D_Talents.json"]);
-const mountsFile = await resolveOptionalAbsoluteFile([
-  path.join(gameExportDir, "AI", "D_Mounts.json"),
-  path.join(gameExportDir, "D_Mounts.json")
-]);
-const playerTalentModifierFile = await resolveExistingFile(gameExportDir, [
-  "Talents/D_PlayerTalentModifiers.json",
-  "D_PlayerTalentModifiers.json"
-]);
-const defaultGameIniFile = await resolveExistingFile(gameExportDir, [
-  "Icarus/Config/DefaultGame.ini",
-  "Config/DefaultGame.ini",
-  "DefaultGame.ini"
-]);
-const contentSourceDir = await resolveExistingDir(gameExportDir, ["Icarus/Content", "Content"]);
-const localizationSourceDir = await resolveExistingDir(gameExportDir, [
-  "Icarus/Content/Localization/Game",
-  "Content/Localization/Game",
-  "Localization/Game"
-]);
+  await runInputPreflight(gameExportDir);
 
-const ranksData = await readJson(rankFile);
-const modelsData = await readJson(modelFile);
-const archetypesData = await readJson(archetypeFile);
-const treesData = await readJson(treeFile);
-const talentsData = await readJson(talentFile);
-const mountsData = mountsFile ? await readJson(mountsFile) : null;
-const playerTalentModifiersData = await readJson(playerTalentModifierFile);
-const projectVersion = await readProjectVersion(defaultGameIniFile);
+  if (options.validate) {
+    console.log("✅ Validation passed. All required transform inputs are present.");
+    return;
+  }
 
-if (!mountsFile) {
-  console.warn("D_Mounts.json not found. Creature mount icon overrides were skipped.");
-}
+  const rankFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentRanks.json"]);
+  const modelFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentModels.json"]);
+  const archetypeFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentArchetypes.json"]);
+  const treeFile = await resolveExistingFile(gameExportDir, ["Talents/D_TalentTrees.json"]);
+  const talentFile = await resolveExistingFile(gameExportDir, ["Talents/D_Talents.json"]);
+  const mountsFile = await resolveOptionalAbsoluteFile([path.join(gameExportDir, "AI", "D_Mounts.json")]);
+  const playerTalentModifierFile = await resolveExistingFile(gameExportDir, ["Talents/D_PlayerTalentModifiers.json"]);
+  const defaultGameIniFile = await resolveExistingFile(gameExportDir, ["Icarus/Config/DefaultGame.ini"]);
+  const contentSourceDir = await resolveExistingDir(gameExportDir, ["Icarus/Content"]);
+  const localizationSourceDir = await resolveExistingDir(gameExportDir, ["Icarus/Content/Localization/Game"]);
 
-const ranks = buildRanks(ranksData);
-const models = buildModels(modelsData);
-const mountIconOverrides = buildMountIconOverrides(mountsData);
-const archetypes = buildArchetypes(archetypesData, models, mountIconOverrides);
-const trees = buildTrees(treesData, archetypes, mountIconOverrides);
-const talents = buildTalents(talentsData, trees);
-const playerTalentModifiers = buildPlayerTalentModifiers(playerTalentModifiersData);
-const mountIconOverrideStats = summarizeMountIconOverrides(mountIconOverrides, archetypes, trees);
+  const ranksData = await readJson(rankFile);
+  const modelsData = await readJson(modelFile);
+  const archetypesData = await readJson(archetypeFile);
+  const treesData = await readJson(treeFile);
+  const talentsData = await readJson(talentFile);
+  const mountsData = mountsFile ? await readJson(mountsFile) : null;
+  const playerTalentModifiersData = await readJson(playerTalentModifierFile);
+  const projectVersion = await readProjectVersion(defaultGameIniFile);
 
-const output = {
-  schemaVersion: 4,
-  generatedAt: new Date().toISOString(),
-  projectVersion,
-  source: {
-    gameExportDir: path.relative(process.cwd(), gameExportDir),
-    mountIconOverrides: mountIconOverrideStats
-  },
-  playerTalentModifiers,
-  ranks,
-  models
-};
+  if (!mountsFile) {
+    console.warn("D_Mounts.json not found. Creature mount icon overrides were skipped.");
+  }
 
-attachArchetypesToModels(models, archetypes);
-attachTreesToArchetypes(archetypes, trees);
-attachTalentsToTrees(trees, talents);
+  const ranks = buildRanks(ranksData);
+  const models = buildModels(modelsData);
+  const mountIconOverrides = buildMountIconOverrides(mountsData);
+  const archetypes = buildArchetypes(archetypesData, models, mountIconOverrides);
+  const trees = buildTrees(treesData, archetypes, mountIconOverrides);
+  const talents = buildTalents(talentsData, trees);
+  const playerTalentModifiers = buildPlayerTalentModifiers(playerTalentModifiersData);
+  const mountIconOverrideStats = summarizeMountIconOverrides(mountIconOverrides, archetypes, trees);
 
-await writeJson(outPath, output);
+  const output = {
+    schemaVersion: 4,
+    generatedAt: new Date().toISOString(),
+    projectVersion,
+    source: {
+      gameExportDir: path.relative(process.cwd(), gameExportDir),
+      mountIconOverrides: mountIconOverrideStats
+    },
+    playerTalentModifiers,
+    ranks,
+    models
+  };
 
-if (!options.skipCopyExports) {
-  const exportsTargetRoot = path.join(appPublicDir, "Exports");
-  const contentTargetDir = path.join(exportsTargetRoot, "Icarus", "Content");
-  const localizationTargetDir = path.join(contentTargetDir, "Localization", "Game");
+  attachArchetypesToModels(models, archetypes);
+  attachTreesToArchetypes(archetypes, trees);
+  attachTalentsToTrees(trees, talents);
 
-  await fs.rm(exportsTargetRoot, { recursive: true, force: true });
+  await writeJson(outPath, output);
 
-  const copiedLocales = await copyLocalizationFiles(localizationSourceDir, localizationTargetDir);
-  const copyResult = await copyReferencedAssets({
-    sourceContentDir: contentSourceDir,
-    targetContentDir: contentTargetDir,
-    unrealPaths: [...collectRuntimeAssetPaths(output), ...EXTRA_RUNTIME_ASSET_PATHS]
-  });
+  if (!options.skipCopyExports) {
+    const exportsTargetRoot = path.join(appPublicDir, "Exports");
+    const contentTargetDir = path.join(exportsTargetRoot, "Icarus", "Content");
+    const localizationTargetDir = path.join(contentTargetDir, "Localization", "Game");
+    const folderCopyStats = new Map();
+    const sourceFileCountCache = new Map();
 
-  if (copyResult.missingCritical.length > 0) {
-    throw new Error(
-      `Missing critical referenced assets (${copyResult.missingCritical.length}). First missing: ${copyResult.missingCritical[0]}`
+    await fs.rm(exportsTargetRoot, { recursive: true, force: true });
+
+    const localizationResult = await copyLocalizationFiles(localizationSourceDir, localizationTargetDir);
+    for (const copiedFile of localizationResult.copiedFiles) {
+      await recordFolderCopyStat(folderCopyStats, exportsTargetRoot, copiedFile, sourceFileCountCache);
+    }
+
+    const copyResult = await copyReferencedAssets({
+      sourceContentDir: contentSourceDir,
+      targetContentDir: contentTargetDir,
+      unrealPaths: [...collectRuntimeAssetPaths(output), ...EXTRA_RUNTIME_ASSET_PATHS]
+    });
+
+    for (const copiedFile of copyResult.copiedFiles) {
+      await recordFolderCopyStat(folderCopyStats, exportsTargetRoot, copiedFile, sourceFileCountCache);
+    }
+
+    console.log(`\n=== COPY SUMMARY ===\n${renderFolderCopySummaryTree(exportsTargetRoot, folderCopyStats)}\n`);
+
+    const totalMissingAssets = copyResult.missingCritical.length + copyResult.missingOptional.length;
+    if (totalMissingAssets > 0) {
+      const missingTree = renderMissingAssetsTree(copyResult);
+      console.warn(
+        `\n=== MISSING ASSETS ===\nDetected missing referenced assets (critical: ${copyResult.missingCritical.length}, non-critical: ${copyResult.missingOptional.length})\n${missingTree}\n`
+      );
+    }
+
+    if (copyResult.missingCritical.length > 0) {
+      throw new Error(`Missing critical referenced assets: ${copyResult.missingCritical.length}`);
+    }
+
+    console.log(
+      `Copied Exports subset to ${exportsTargetRoot} (locales: ${localizationResult.localeCodes.length}, assets: ${copyResult.copiedCount})`
     );
   }
 
-  if (copyResult.missingOptional.length > 0) {
-    console.warn(`Missing non-critical referenced assets: ${copyResult.missingOptional.length}`);
-  }
-
-  console.log(
-    `Copied Exports subset to ${exportsTargetRoot} (locales: ${copiedLocales.length}, assets: ${copyResult.copiedCount})`
-  );
+  console.log(`Wrote ${outPath}`);
 }
-
-console.log(`Wrote ${outPath}`);
 
 function parseArgs(argv) {
   const opts = {};
@@ -142,13 +152,132 @@ function parseArgs(argv) {
     } else if (arg === "--app-public") {
       opts.appPublic = argv[i + 1];
       i += 1;
+    } else if (arg === "--validate") {
+      opts.validate = true;
     } else if (arg === "--skip-copy-exports") {
       opts.skipCopyExports = true;
-    } else if (arg === "--watch") {
-      opts.watch = true;
     }
   }
   return opts;
+}
+
+class PreflightError extends Error {
+  constructor(message, details = {}) {
+    super(message);
+    this.name = "PreflightError";
+    this.details = details;
+  }
+}
+
+async function runInputPreflight(gameExportDir) {
+  const requiredFiles = [
+    "Talents/D_TalentRanks.json",
+    "Talents/D_TalentModels.json",
+    "Talents/D_TalentArchetypes.json",
+    "Talents/D_TalentTrees.json",
+    "Talents/D_Talents.json",
+    "Talents/D_PlayerTalentModifiers.json",
+    "Icarus/Config/DefaultGame.ini"
+  ];
+  const requiredDirs = [
+    "Icarus/Content",
+    "Icarus/Content/Localization/Game"
+  ];
+
+  const missingFiles = [];
+  const missingDirs = [];
+
+  for (const relPath of requiredFiles) {
+    const fullPath = path.join(gameExportDir, relPath);
+    if (!(await pathExists(fullPath))) {
+      missingFiles.push(relPath);
+    }
+  }
+
+  for (const relPath of requiredDirs) {
+    const fullPath = path.join(gameExportDir, relPath);
+    if (!(await pathExists(fullPath))) {
+      missingDirs.push(relPath);
+      continue;
+    }
+
+    const stat = await fs.lstat(fullPath);
+    if (!stat.isDirectory()) {
+      missingDirs.push(relPath);
+    }
+  }
+
+  if (missingFiles.length === 0 && missingDirs.length === 0) {
+    return;
+  }
+
+  throw new PreflightError("Preflight input check failed.", {
+    gameExportDir,
+    missingFiles,
+    missingDirs,
+    tree: renderPreflightMissingTree(missingFiles, missingDirs)
+  });
+}
+
+function renderPreflightMissingTree(missingFiles, missingDirs) {
+  const rootNode = { dirs: new Map(), files: new Set() };
+
+  insertPreflightFiles(rootNode, missingFiles);
+  insertPreflightDirs(rootNode, missingDirs);
+
+  const lines = ["MissingRequiredInputs/"];
+  appendTreeLines(rootNode, "", lines);
+  return lines.join("\n");
+}
+
+function insertPreflightFiles(rootNode, missingFiles) {
+  for (const relPath of missingFiles) {
+    const parts = relPath.split("/").filter(Boolean);
+    const fileName = parts.pop();
+    let node = rootNode;
+
+    for (const part of parts) {
+      if (!node.dirs.has(part)) {
+        node.dirs.set(part, { dirs: new Map(), files: new Set() });
+      }
+      node = node.dirs.get(part);
+    }
+
+    if (fileName) {
+      node.files.add(fileName);
+    }
+  }
+}
+
+function insertPreflightDirs(rootNode, missingDirs) {
+  for (const relPath of missingDirs) {
+    const parts = relPath.split("/").filter(Boolean);
+    let node = rootNode;
+
+    for (const part of parts) {
+      if (!node.dirs.has(part)) {
+        node.dirs.set(part, { dirs: new Map(), files: new Set() });
+      }
+      node = node.dirs.get(part);
+    }
+  }
+}
+
+function handleFatalError(error) {
+  console.error("\n========================================");
+  console.error("❌ TRANSFORM FAILED");
+  console.error("========================================");
+
+  if (error instanceof PreflightError) {
+    console.error(`Input root: ${error.details.gameExportDir}`);
+    console.error("\nPreflight found missing required inputs:\n");
+    console.error(error.details.tree);
+    console.error("\nTip: run `npm run validate` after fixing your Exports layout.");
+  } else {
+    console.error(error?.message ?? String(error));
+  }
+
+  process.exitCode = 1;
 }
 
 async function readJson(filePath) {
@@ -543,6 +672,7 @@ function unrealToRelativePngPath(unrealPath) {
 async function copyReferencedAssets({ sourceContentDir, targetContentDir, unrealPaths }) {
   const missingCritical = [];
   const missingOptional = [];
+  const copiedFiles = [];
   const seenRelPaths = new Set();
   let copiedCount = 0;
 
@@ -558,28 +688,90 @@ async function copyReferencedAssets({ sourceContentDir, targetContentDir, unreal
 
     if (!(await pathExists(sourcePath))) {
       if (isCriticalAssetPath(unrealPath)) {
-        missingCritical.push(sourcePath);
+        missingCritical.push(relPngPath);
       } else {
-        missingOptional.push(sourcePath);
+        missingOptional.push(relPngPath);
       }
       continue;
     }
 
     await fs.mkdir(path.dirname(targetPath), { recursive: true });
     await fs.copyFile(sourcePath, targetPath);
+    copiedFiles.push({ sourcePath, targetPath });
     copiedCount += 1;
   }
 
   return {
     copiedCount,
     missingCritical,
-    missingOptional
+    missingOptional,
+    copiedFiles
   };
+}
+
+function renderMissingAssetsTree({ missingCritical = [], missingOptional = [] }) {
+  const rootNode = { dirs: new Map(), files: new Set() };
+
+  insertPathsIntoTree(rootNode, missingCritical, "critical");
+  insertPathsIntoTree(rootNode, missingOptional, "non-critical");
+
+  const lines = ["MissingAssets/"];
+  appendTreeLines(rootNode, "", lines);
+  return lines.join("\n");
+}
+
+function insertPathsIntoTree(rootNode, relativePaths, categoryName) {
+  if (!relativePaths.length) {
+    return;
+  }
+
+  for (const relPath of relativePaths) {
+    const cleanPath = relPath.split(path.sep).join("/");
+    const parts = [categoryName, ...cleanPath.split("/").filter(Boolean)];
+    const fileName = parts.pop();
+
+    let node = rootNode;
+    for (const part of parts) {
+      if (!node.dirs.has(part)) {
+        node.dirs.set(part, { dirs: new Map(), files: new Set() });
+      }
+      node = node.dirs.get(part);
+    }
+
+    if (fileName) {
+      node.files.add(fileName);
+    }
+  }
+}
+
+function appendTreeLines(node, prefix, lines) {
+  const dirEntries = [...node.dirs.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([name, childNode]) => ({ name, childNode, isDirectory: true }));
+  const fileEntries = [...node.files]
+    .sort((a, b) => a.localeCompare(b))
+    .map((name) => ({ name, childNode: null, isDirectory: false }));
+  const entries = [...dirEntries, ...fileEntries];
+
+  entries.forEach(({ name, childNode, isDirectory }, index) => {
+    const isLast = index === entries.length - 1;
+    const branch = isLast ? "└── " : "├── ";
+
+    if (isDirectory) {
+      lines.push(`${prefix}${branch}${name}/`);
+      const nextPrefix = `${prefix}${isLast ? "    " : "│   "}`;
+      appendTreeLines(childNode, nextPrefix, lines);
+      return;
+    }
+
+    lines.push(`${prefix}${branch}${name}`);
+  });
 }
 
 async function copyLocalizationFiles(sourceLocalizationDir, targetLocalizationDir) {
   const sourceManifestPath = path.join(sourceLocalizationDir, "Game.json");
   const manifestData = await readJson(sourceManifestPath);
+  const copiedFiles = [];
   const localeCodes = Array.from(new Set([
     "en",
     manifestData?.NativeCulture,
@@ -587,7 +779,9 @@ async function copyLocalizationFiles(sourceLocalizationDir, targetLocalizationDi
   ].filter(Boolean)));
 
   await fs.mkdir(targetLocalizationDir, { recursive: true });
-  await fs.copyFile(sourceManifestPath, path.join(targetLocalizationDir, "Game.json"));
+  const targetManifestPath = path.join(targetLocalizationDir, "Game.json");
+  await fs.copyFile(sourceManifestPath, targetManifestPath);
+  copiedFiles.push({ sourcePath: sourceManifestPath, targetPath: targetManifestPath });
 
   for (const localeCode of localeCodes) {
     const sourceLocalePath = path.join(sourceLocalizationDir, localeCode, "Game.json");
@@ -598,9 +792,108 @@ async function copyLocalizationFiles(sourceLocalizationDir, targetLocalizationDi
     const targetLocalePath = path.join(targetLocalizationDir, localeCode, "Game.json");
     await fs.mkdir(path.dirname(targetLocalePath), { recursive: true });
     await fs.copyFile(sourceLocalePath, targetLocalePath);
+    copiedFiles.push({ sourcePath: sourceLocalePath, targetPath: targetLocalePath });
   }
 
-  return localeCodes;
+  return {
+    localeCodes,
+    copiedFiles
+  };
+}
+
+async function recordFolderCopyStat(statsMap, rootDir, copiedFile, sourceFileCountCache) {
+  const relFolderPath = path.relative(rootDir, path.dirname(copiedFile.targetPath)).split(path.sep).join("/") || ".";
+  const sourceFolderPath = path.dirname(copiedFile.sourcePath);
+  const sourceFolderFileCount = await countFilesNonRecursive(sourceFolderPath, sourceFileCountCache);
+
+  if (!statsMap.has(relFolderPath)) {
+    statsMap.set(relFolderPath, { copied: 0, present: sourceFolderFileCount });
+  }
+
+  const stats = statsMap.get(relFolderPath);
+  stats.copied += 1;
+}
+
+async function countFilesNonRecursive(dirPath, cache) {
+  if (cache.has(dirPath)) {
+    return cache.get(dirPath);
+  }
+
+  let count = 0;
+  try {
+    const entries = await fs.readdir(dirPath, { withFileTypes: true });
+    count = entries.filter((entry) => entry.isFile()).length;
+  } catch {
+    count = 0;
+  }
+
+  cache.set(dirPath, count);
+  return count;
+}
+
+function renderFolderCopySummaryTree(exportsTargetRoot, folderCopyStats) {
+  const rootNode = {
+    children: new Map(),
+    stats: { copied: 0, present: 0 }
+  };
+
+  for (const [folderPath, stats] of folderCopyStats.entries()) {
+    const parts = folderPath === "." ? [] : folderPath.split("/").filter(Boolean);
+    let node = rootNode;
+
+    for (const part of parts) {
+      if (!node.children.has(part)) {
+        node.children.set(part, {
+          children: new Map(),
+          stats: { copied: 0, present: 0 }
+        });
+      }
+      node = node.children.get(part);
+    }
+
+    node.stats.copied += stats.copied;
+    node.stats.present = stats.present;
+  }
+
+  const rootLabel = `${path.basename(exportsTargetRoot) || "Exports"}/`;
+  const lines = [rootLabel];
+  appendFolderSummaryLines(rootNode, "", lines);
+
+  return lines.join("\n");
+}
+
+function appendFolderSummaryLines(node, prefix, lines) {
+  const entries = [...node.children.entries()].sort(([a], [b]) => a.localeCompare(b));
+  const visibleEntries = entries.filter(([, childNode]) => isVisibleFolderNode(childNode));
+
+  visibleEntries.forEach(([label, childNode], index) => {
+    const isLast = index === visibleEntries.length - 1;
+    const branch = isLast ? "└── " : "├── ";
+    const stats = childNode.stats;
+    const hasOwnStats = stats.copied > 0 || stats.present > 0;
+    lines.push(
+      hasOwnStats
+        ? `${prefix}${branch}${label}/ (${stats.copied} of ${stats.present})`
+        : `${prefix}${branch}${label}/`
+    );
+    const nextPrefix = `${prefix}${isLast ? "    " : "│   "}`;
+    appendFolderSummaryLines(childNode, nextPrefix, lines);
+  });
+}
+
+function isVisibleFolderNode(node) {
+  const hasOwnStats = node.stats.copied > 0 || node.stats.present > 0;
+  if (hasOwnStats) {
+    return true;
+  }
+
+  for (const childNode of node.children.values()) {
+    if (isVisibleFolderNode(childNode)) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 async function resolveExistingFile(baseDir, relativeCandidates) {

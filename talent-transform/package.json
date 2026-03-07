@@ -4,8 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "check:inputs": "node src/preflight-inputs.mjs",
     "transform": "node src/index.mjs",
-    "transform:watch": "node src/index.mjs --watch"
+    "validate": "node src/index.mjs --validate"
   }
 }
