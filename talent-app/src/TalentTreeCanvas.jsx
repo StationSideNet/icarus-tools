@@ -56,15 +56,15 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
       maxY = -Infinity
 
     talents.forEach((talent) => {
-      const x = scaleValue(talent.position?.x ?? 0)
-      const y = scaleValue(talent.position?.y ?? 0)
-      const w = scaleValue(talent.size?.x ?? 128)
-      const h = scaleValue(talent.size?.y ?? 128)
+      const cx = scaleValue(talent.position?.x ?? 0)
+      const cy = scaleValue(talent.position?.y ?? 0)
+      const hw = scaleValue(talent.size?.x ?? 128) / 2
+      const hh = scaleValue(talent.size?.y ?? 128) / 2
 
-      minX = Math.min(minX, x)
-      minY = Math.min(minY, y)
-      maxX = Math.max(maxX, x + w)
-      maxY = Math.max(maxY, y + h)
+      minX = Math.min(minX, cx - hw)
+      minY = Math.min(minY, cy - hh)
+      maxX = Math.max(maxX, cx + hw)
+      maxY = Math.max(maxY, cy + hh)
     })
 
     const padding = 10
@@ -244,14 +244,10 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
         >
         <g className="edges">
           {talents.map((talent) => {
-            const fromPos = worldToContainer(
+            const fromCenter = worldToContainer(
               talent.position?.x ?? 0,
               talent.position?.y ?? 0
             )
-            const fromCenter = {
-              x: fromPos.x + scaleValue(talent.size?.x ?? 128) / 2,
-              y: fromPos.y + scaleValue(talent.size?.y ?? 128) / 2
-            }
 
             const requirements = effectiveRequirementsByTalentId[talent.id] ?? []
 
@@ -260,14 +256,10 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
               const required = visibleTalentMap[reqId]
               if (!required) return null
 
-              const toPos = worldToContainer(
+              const toCenter = worldToContainer(
                 required.position?.x ?? 0,
                 required.position?.y ?? 0
               )
-              const toCenter = {
-                x: toPos.x + scaleValue(required.size?.x ?? 128) / 2,
-                y: toPos.y + scaleValue(required.size?.y ?? 128) / 2
-              }
 
               const isHovered = hoveredTalentId === talent.id || hoveredTalentId === reqId
               const isRequirementFulfilled = (skilledTalents[reqId] ?? 0) > 0
@@ -276,11 +268,7 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
                 .filter(Boolean)
 
               const waypoints = viaTalents.map((viaTalent) => {
-                const viaPos = worldToContainer(viaTalent.position?.x ?? 0, viaTalent.position?.y ?? 0)
-                return {
-                  x: viaPos.x + scaleValue(viaTalent.size?.x ?? 128) / 2,
-                  y: viaPos.y + scaleValue(viaTalent.size?.y ?? 128) / 2
-                }
+                return worldToContainer(viaTalent.position?.x ?? 0, viaTalent.position?.y ?? 0)
               })
 
               // Per-segment draw methods: first segment uses the child talent's
@@ -397,8 +385,8 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
               key={talent.id}
               className={`talent-node ${isHovered ? 'hovered' : ''} ${isDisabled ? 'disabled' : ''} ${isAvailableUnskilled ? 'available-unskilled' : ''} ${isSkilled ? 'skilled' : ''}`}
               style={{
-                left: `${pos.x}px`,
-                top: `${pos.y}px`,
+                left: `${pos.x - w / 2}px`,
+                top: `${pos.y - h / 2}px`,
                 width: `${w}px`,
                 height: `${h}px`
               }}
