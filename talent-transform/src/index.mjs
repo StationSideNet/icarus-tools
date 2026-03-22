@@ -1,6 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { runPreflight } from "./preflight.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,10 +51,10 @@ async function main() {
   const blueprintsOutPath = options.outBlueprints ?? DEFAULT_BLUEPRINTS_OUT_PATH;
   const appPublicDir = options.appPublic ?? DEFAULT_APP_PUBLIC_DIR;
 
-  await runInputPreflight(gameExportDir);
+  await runPreflight({ exportDir: gameExportDir });
 
   if (options.validate) {
-    console.log("✅ Validation passed. All required transform inputs are present.");
+    console.log("✅ Validation passed.");
     return;
   }
 
@@ -262,23 +263,11 @@ async function main() {
 
     console.log(`\n=== COPY SUMMARY ===\n${renderFolderCopySummaryTree(exportsTargetRoot, folderCopyStats)}\n`);
 
-    const totalMissingAssets = copyResult.missingCritical.length + copyResult.missingOptional.length;
-    if (totalMissingAssets > 0) {
-      const missingTree = renderMissingAssetsTree(copyResult);
+    if (copyResult.missingAssets.length > 0) {
+      const missingTree = renderMissingAssetsTree(copyResult.missingAssets);
       console.warn(
-        `\n=== MISSING ASSETS ===\nDetected missing referenced assets (critical: ${copyResult.missingCritical.length}, non-critical: ${copyResult.missingOptional.length})\n${missingTree}\n`
+        `\n=== MISSING ASSETS (warnings) ===\n${copyResult.missingAssets.length} referenced PNG(s) not found — icons will appear broken in the app.\n${missingTree}\n`
       );
-    }
-
-    if (copyResult.missingIcons.length > 0) {
-      const missingIconsTree = renderMissingIconsTree(copyResult.missingIcons);
-      console.warn(
-        `\n=== MISSING ICONS ===\nDetected missing icon assets across all datasets: ${copyResult.missingIcons.length}\n${missingIconsTree}\n`
-      );
-    }
-
-    if (copyResult.missingCritical.length > 0) {
-      throw new Error(`Missing critical referenced assets: ${copyResult.missingCritical.length}`);
     }
 
     console.log(
@@ -315,122 +304,11 @@ function parseArgs(argv) {
   return opts;
 }
 
-class PreflightError extends Error {
-  constructor(message, details = {}) {
-    super(message);
-    this.name = "PreflightError";
-    this.details = details;
-  }
-}
-
-async function runInputPreflight(gameExportDir) {
-  const requiredFiles = [
-    "Talents/D_TalentRanks.json",
-    "Talents/D_TalentModels.json",
-    "Talents/D_TalentArchetypes.json",
-    "Talents/D_TalentTrees.json",
-    "Talents/D_Talents.json",
-    "Talents/D_PlayerTalentModifiers.json",
-    "Icarus/Config/DefaultGame.ini"
-  ];
-  const requiredDirs = [
-    "Icarus/Content",
-    "Icarus/Content/Localization/Game"
-  ];
-
-  const missingFiles = [];
-  const missingDirs = [];
-
-  for (const relPath of requiredFiles) {
-    const fullPath = path.join(gameExportDir, relPath);
-    if (!(await pathExists(fullPath))) {
-      missingFiles.push(relPath);
-    }
-  }
-
-  for (const relPath of requiredDirs) {
-    const fullPath = path.join(gameExportDir, relPath);
-    if (!(await pathExists(fullPath))) {
-      missingDirs.push(relPath);
-      continue;
-    }
-
-    const stat = await fs.lstat(fullPath);
-    if (!stat.isDirectory()) {
-      missingDirs.push(relPath);
-    }
-  }
-
-  if (missingFiles.length === 0 && missingDirs.length === 0) {
-    return;
-  }
-
-  throw new PreflightError("Preflight input check failed.", {
-    gameExportDir,
-    missingFiles,
-    missingDirs,
-    tree: renderPreflightMissingTree(missingFiles, missingDirs)
-  });
-}
-
-function renderPreflightMissingTree(missingFiles, missingDirs) {
-  const rootNode = { dirs: new Map(), files: new Set() };
-
-  insertPreflightFiles(rootNode, missingFiles);
-  insertPreflightDirs(rootNode, missingDirs);
-
-  const lines = ["MissingRequiredInputs/"];
-  appendTreeLines(rootNode, "", lines);
-  return lines.join("\n");
-}
-
-function insertPreflightFiles(rootNode, missingFiles) {
-  for (const relPath of missingFiles) {
-    const parts = relPath.split("/").filter(Boolean);
-    const fileName = parts.pop();
-    let node = rootNode;
-
-    for (const part of parts) {
-      if (!node.dirs.has(part)) {
-        node.dirs.set(part, { dirs: new Map(), files: new Set() });
-      }
-      node = node.dirs.get(part);
-    }
-
-    if (fileName) {
-      node.files.add(fileName);
-    }
-  }
-}
-
-function insertPreflightDirs(rootNode, missingDirs) {
-  for (const relPath of missingDirs) {
-    const parts = relPath.split("/").filter(Boolean);
-    let node = rootNode;
-
-    for (const part of parts) {
-      if (!node.dirs.has(part)) {
-        node.dirs.set(part, { dirs: new Map(), files: new Set() });
-      }
-      node = node.dirs.get(part);
-    }
-  }
-}
-
 function handleFatalError(error) {
   console.error("\n========================================");
   console.error("❌ TRANSFORM FAILED");
   console.error("========================================");
-
-  if (error instanceof PreflightError) {
-    console.error(`Input root: ${error.details.gameExportDir}`);
-    console.error("\nPreflight found missing required inputs:\n");
-    console.error(error.details.tree);
-    console.error("\nTip: run `npm run validate` after fixing your Exports layout.");
-  } else {
-    console.error(error?.message ?? String(error));
-  }
-
+  console.error(error?.message ?? String(error));
   process.exitCode = 1;
 }
 
@@ -1393,9 +1271,6 @@ function logIconCoverageSummary(label, summary) {
   console.log(lines.join("\n"));
 }
 
-function isCriticalAssetPath(unrealPath) {
-  return unrealPath.includes("/Assets/2DArt/UI/Talents/");
-}
 
 function unrealToRelativePngPath(unrealPath) {
   if (!unrealPath.startsWith("/Game/")) {
@@ -1412,9 +1287,7 @@ function unrealToRelativePngPath(unrealPath) {
 }
 
 async function copyReferencedAssets({ sourceContentDir, targetContentDir, assetRefs = [], unrealPaths = [] }) {
-  const missingCritical = [];
-  const missingOptional = [];
-  const missingIcons = [];
+  const missingAssets = [];
   const copiedFiles = [];
   const mergedRefsByRelPath = new Map();
   let copiedCount = 0;
@@ -1457,21 +1330,11 @@ async function copyReferencedAssets({ sourceContentDir, targetContentDir, assetR
     const targetPath = path.join(targetContentDir, relPngPath);
 
     if (!(await pathExists(sourcePath))) {
-      const anyCritical = [...merged.unrealPaths].some((unrealPath) => isCriticalAssetPath(unrealPath));
-
-      if (anyCritical) {
-        missingCritical.push(relPngPath);
-      } else {
-        missingOptional.push(relPngPath);
-      }
-
-      if (merged.isIcon) {
-        missingIcons.push({
-          relPngPath,
-          sources: [...merged.sourceLabels].sort((left, right) => left.localeCompare(right))
-        });
-      }
-
+      missingAssets.push({
+        relPngPath,
+        isIcon: merged.isIcon,
+        sources: [...merged.sourceLabels].sort((left, right) => left.localeCompare(right))
+      });
       continue;
     }
 
@@ -1483,80 +1346,38 @@ async function copyReferencedAssets({ sourceContentDir, targetContentDir, assetR
 
   return {
     copiedCount,
-    missingCritical,
-    missingOptional,
-    missingIcons,
+    missingAssets,
     copiedFiles
   };
 }
 
-function renderMissingAssetsTree({ missingCritical = [], missingOptional = [] }) {
+function renderMissingAssetsTree(missingAssets = []) {
   const rootNode = { dirs: new Map(), files: new Set() };
 
-  insertPathsIntoTree(rootNode, missingCritical, "critical");
-  insertPathsIntoTree(rootNode, missingOptional, "non-critical");
+  for (const entry of missingAssets) {
+    const cleanPath = entry.relPngPath.split(path.sep).join("/");
+    const parts = cleanPath.split("/").filter(Boolean);
+    const fileName = parts.pop();
+    const iconSuffix = entry.isIcon ? " [icon]" : "";
+
+    let node = rootNode;
+    for (const part of parts) {
+      if (!node.dirs.has(part)) {
+        node.dirs.set(part, { dirs: new Map(), files: new Set() });
+      }
+      node = node.dirs.get(part);
+    }
+
+    if (fileName) {
+      node.files.add(`${fileName}${iconSuffix}`);
+    }
+  }
 
   const lines = ["MissingAssets/"];
   appendTreeLines(rootNode, "", lines);
   return lines.join("\n");
 }
 
-function renderMissingIconsTree(missingIcons = []) {
-  const rootNode = { dirs: new Map(), files: new Set() };
-
-  for (const iconEntry of missingIcons) {
-    const cleanPath = iconEntry?.relPngPath?.split(path.sep).join("/");
-    if (!cleanPath) {
-      continue;
-    }
-
-    const sourceSuffix = Array.isArray(iconEntry.sources) && iconEntry.sources.length > 0
-      ? ` [${iconEntry.sources.join(", ")}]`
-      : "";
-    const parts = cleanPath.split("/").filter(Boolean);
-    const fileName = parts.pop();
-
-    let node = rootNode;
-    for (const part of parts) {
-      if (!node.dirs.has(part)) {
-        node.dirs.set(part, { dirs: new Map(), files: new Set() });
-      }
-      node = node.dirs.get(part);
-    }
-
-    if (fileName) {
-      node.files.add(`${fileName}${sourceSuffix}`);
-    }
-  }
-
-  const lines = ["MissingIcons/"];
-  appendTreeLines(rootNode, "", lines);
-  return lines.join("\n");
-}
-
-function insertPathsIntoTree(rootNode, relativePaths, categoryName) {
-  if (!relativePaths.length) {
-    return;
-  }
-
-  for (const relPath of relativePaths) {
-    const cleanPath = relPath.split(path.sep).join("/");
-    const parts = [categoryName, ...cleanPath.split("/").filter(Boolean)];
-    const fileName = parts.pop();
-
-    let node = rootNode;
-    for (const part of parts) {
-      if (!node.dirs.has(part)) {
-        node.dirs.set(part, { dirs: new Map(), files: new Set() });
-      }
-      node = node.dirs.get(part);
-    }
-
-    if (fileName) {
-      node.files.add(fileName);
-    }
-  }
-}
 
 function appendTreeLines(node, prefix, lines) {
   const dirEntries = [...node.dirs.entries()]

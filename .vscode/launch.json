@@ -6,63 +6,92 @@
       "type": "node-terminal",
       "request": "launch",
       "command": "dotnet run -- --out=\"${workspaceFolder}/Exports\"",
-      "cwd": "${workspaceFolder}/exporter"
+      "cwd": "${workspaceFolder}/exporter",
+      "autoAttachChildProcesses": false
     },
     {
       "name": "exporter: run (with textures)",
       "type": "node-terminal",
       "request": "launch",
       "command": "dotnet run -- --out=\"${workspaceFolder}/Exports\" --textures=\"${workspaceFolder}/Exports/texture-list.txt\"",
-      "cwd": "${workspaceFolder}/exporter"
+      "cwd": "${workspaceFolder}/exporter",
+      "autoAttachChildProcesses": false
     },
     {
       "name": "exporter: run (textures only, no-clean)",
       "type": "node-terminal",
       "request": "launch",
       "command": "dotnet run -- --out=\"${workspaceFolder}/Exports\" --textures=\"${workspaceFolder}/Exports/texture-list.txt\" --no-clean",
-      "cwd": "${workspaceFolder}/exporter"
+      "cwd": "${workspaceFolder}/exporter",
+      "autoAttachChildProcesses": false
     },
     {
-      "name": "talent-transform: asset-list",
-      "type": "node-terminal",
+      "name": "talent-transform: assets",
+      "type": "node",
       "request": "launch",
-      "command": "node scripts/export-asset-list.mjs",
-      "cwd": "${workspaceFolder}/talent-transform"
+      "program": "${workspaceFolder}/talent-transform/scripts/assets.mjs",
+      "cwd": "${workspaceFolder}/talent-transform",
+      "console": "integratedTerminal"
     },
     {
       "name": "talent-transform: transform",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run transform",
-      "cwd": "${workspaceFolder}/talent-transform"
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "transform"],
+      "cwd": "${workspaceFolder}/talent-transform",
+      "console": "integratedTerminal"
     },
     {
       "name": "talent-transform: validate",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run validate",
-      "cwd": "${workspaceFolder}/talent-transform"
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "validate"],
+      "cwd": "${workspaceFolder}/talent-transform",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "pipeline: full",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/pipeline.mjs",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "pipeline: skip export",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/pipeline.mjs",
+      "args": ["--skip-export"],
+      "console": "integratedTerminal"
     },
     {
       "name": "talent-app: dev",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run dev",
-      "cwd": "${workspaceFolder}/talent-app"
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}/talent-app",
+      "console": "integratedTerminal"
     },
     {
       "name": "talent-app: build",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run build",
-      "cwd": "${workspaceFolder}/talent-app"
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "build"],
+      "cwd": "${workspaceFolder}/talent-app",
+      "console": "integratedTerminal"
     },
     {
       "name": "talent-app: run",
-      "type": "node-terminal",
+      "type": "node",
       "request": "launch",
-      "command": "npm run preview",
-      "cwd": "${workspaceFolder}/talent-app"
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview"],
+      "cwd": "${workspaceFolder}/talent-app",
+      "console": "integratedTerminal"
     }
   ]
 }

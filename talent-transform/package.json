@@ -6,6 +6,6 @@
   "scripts": {
     "transform": "node src/index.mjs",
     "validate": "node src/index.mjs --validate",
-    "asset-list": "node scripts/export-asset-list.mjs"
+    "assets": "node scripts/assets.mjs"
   }
 }

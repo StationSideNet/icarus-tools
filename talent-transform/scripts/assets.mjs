@@ -3,7 +3,7 @@
  * uasset paths that need to be decoded as textures by the exporter.
  *
  * Usage:
- *   node scripts/export-asset-list.mjs [gameExportDir] [outputFile]
+ *   node scripts/assets.mjs [gameExportDir] [outputFile]
  *
  * gameExportDir defaults to ../../Exports (relative to this script).
  * outputFile defaults to ../../Exports/texture-list.txt.
@@ -15,6 +15,7 @@
 import fs from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
+import { runPreflight } from "../src/preflight.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -80,15 +81,15 @@ async function main() {
     process.argv[3] ?? "../../Exports/texture-list.txt"
   );
 
+  await runPreflight({ exportDir: gameExportDir });
+
   const dataFiles = [
-    // Required
     path.join(gameExportDir, "Talents/D_TalentRanks.json"),
     path.join(gameExportDir, "Talents/D_TalentModels.json"),
     path.join(gameExportDir, "Talents/D_TalentArchetypes.json"),
     path.join(gameExportDir, "Talents/D_TalentTrees.json"),
     path.join(gameExportDir, "Talents/D_Talents.json"),
     path.join(gameExportDir, "Talents/D_PlayerTalentModifiers.json"),
-    // Optional enrichment
     path.join(gameExportDir, "Traits/D_Itemable.json"),
     path.join(gameExportDir, "AI/D_Mounts.json"),
     path.join(gameExportDir, "Development/D_FeatureLevels.json"),
@@ -101,8 +102,6 @@ async function main() {
     const data = await readJsonOptional(filePath);
     if (data) {
       collectPaths(data, unrealPaths);
-    } else {
-      console.warn(`WARN: Not found or unreadable: ${filePath}`);
     }
   }
 

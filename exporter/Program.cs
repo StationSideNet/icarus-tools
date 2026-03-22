@@ -264,7 +264,10 @@ void TrackSkipped(string file)
 
 foreach (var file in provider.Files.Keys.Where(x => x.EndsWith(".uasset")))
 {
-    if (AssetTotalSize(file) > maxUassetBytes)
+    // Assets in the texture list are always included — size filter must not drop
+    // textures we explicitly need, even if their .uexp pixel data exceeds the threshold.
+    var inTextureList = textureList != null && textureList.Contains(file.TrimStart('/'));
+    if (!inTextureList && AssetTotalSize(file) > maxUassetBytes)
     {
         skippedUassets.Add(file);
         TrackSkipped(file);
