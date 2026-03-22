@@ -1,13 +1,13 @@
 {
   "schemaVersion": 4,
-  "generatedAt": "2026-03-08T01:37:58.370Z",
-  "projectVersion": "3.0.0.150041-rel-DangerousHorizons",
+  "generatedAt": "2026-03-22T22:43:27.302Z",
+  "projectVersion": "3.0.2.150527-rel-DangerousHorizons",
   "source": {
-    "gameExportDir": "../Exports",
+    "gameExportDir": "..\\Exports",
     "mountIconOverrides": {
-      "discovered": 31,
-      "appliedArchetypeIcons": 31,
-      "appliedTreeIcons": 31
+      "discovered": 30,
+      "appliedArchetypeIcons": 30,
+      "appliedTreeIcons": 30
     }
   },
   "playerTalentModifiers": [
@@ -42978,7 +42978,7 @@
           "id": "Creature_Raptor_Desert",
           "modelId": "Creature",
           "display": "NSLOCTEXT(\"D_TalentArchetypes\", \"Creature_Raptor_Desert-DisplayName\", \"Dune Raptor\")",
-          "icon": "/Game/Assets/2DArt/UI/Icons/MapIcons/T_Icon_Map_Raptor.T_Icon_Map_Raptor",
+          "icon": "/Game/Assets/2DArt/UI/Icons/BossMonsters/Icon_Wolf.Icon_Wolf",
           "background": "/Game/Assets/2DArt/UI/FieldGuide/Creatures/Desert/T_Bestiary_Raptor_Desert.T_Bestiary_Raptor_Desert",
           "requiredLevel": 0,
           "requiredFeatureLevel": "DangerousHorizons",
@@ -42987,7 +42987,7 @@
               "id": "Creature_Raptor_Desert",
               "archetypeId": "Creature_Raptor_Desert",
               "display": "NSLOCTEXT(\"D_TalentTrees\", \"Creature_Raptor_Desert-DisplayName\", \"Dune Raptor\")",
-              "icon": "/Game/Assets/2DArt/UI/Icons/MapIcons/T_Icon_Map_Raptor.T_Icon_Map_Raptor",
+              "icon": "/Game/Assets/2DArt/UI/Icons/Icon_ShipThrust.Icon_ShipThrust",
               "background": null,
               "firstRank": "Novice",
               "requiredLevel": 0,
@@ -44736,8 +44736,8 @@
                   "id": "Creature_Chew",
                   "treeId": "Creature_Chew",
                   "type": null,
-                  "display": "INVTEXT(\"[DNT] Free tile, creature name and icon\")",
-                  "description": "",
+                  "display": "NSLOCTEXT(\"D_Talents\", \"Creature_Chew-DisplayName\", \"Draven\")",
+                  "description": "NSLOCTEXT(\"D_Talents\", \"Creature_Chew-Description\", \"Can be specialized into carry capacity improvements\")",
                   "icon": "/Game/Assets/2DArt/UI/Talents/Companion/T_Talent_Base_Chew.T_Talent_Base_Chew",
                   "extraData": null,
                   "position": {
@@ -46199,6 +46199,10 @@
                         {
                           "rawKey": "(Value=\"BaseFallDamageResistance_%\")",
                           "value": 100
+                        },
+                        {
+                          "rawKey": "(Value=\"HasFallDamageImmunity_?\")",
+                          "value": 1
                         }
                       ],
                       "flags": []

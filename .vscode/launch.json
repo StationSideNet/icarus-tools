@@ -2,6 +2,48 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "exporter: run (json only)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "dotnet run -- --out=\"${workspaceFolder}/Exports\"",
+      "cwd": "${workspaceFolder}/exporter"
+    },
+    {
+      "name": "exporter: run (with textures)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "dotnet run -- --out=\"${workspaceFolder}/Exports\" --textures=\"${workspaceFolder}/Exports/texture-list.txt\"",
+      "cwd": "${workspaceFolder}/exporter"
+    },
+    {
+      "name": "exporter: run (textures only, no-clean)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "dotnet run -- --out=\"${workspaceFolder}/Exports\" --textures=\"${workspaceFolder}/Exports/texture-list.txt\" --no-clean",
+      "cwd": "${workspaceFolder}/exporter"
+    },
+    {
+      "name": "talent-transform: asset-list",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "node scripts/export-asset-list.mjs",
+      "cwd": "${workspaceFolder}/talent-transform"
+    },
+    {
+      "name": "talent-transform: transform",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run transform",
+      "cwd": "${workspaceFolder}/talent-transform"
+    },
+    {
+      "name": "talent-transform: validate",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run validate",
+      "cwd": "${workspaceFolder}/talent-transform"
+    },
+    {
       "name": "talent-app: dev",
       "type": "node-terminal",
       "request": "launch",
