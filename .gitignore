@@ -9,3 +9,7 @@ node_modules/*
 # FMODEL Expoorted Files from ICARUS
 Exports/
 *.log
+
+# Local config (contains credentials)
+backfill.config.json
+Downloads/

@@ -4,15 +4,15 @@
     {
       "id": "3.0.2.150527",
       "label": "3.0.2.150527-rel-DangerousHorizons",
-      "generatedAt": "2026-03-23T02:04:58.610Z",
+      "generatedAt": "2026-03-23T03:18:40.592Z",
       "features": {
         "talents": true,
         "blueprints": true
       },
       "assets": {
-        "added": 1194,
+        "added": 0,
         "changed": 0,
-        "unchanged": 0,
+        "unchanged": 1194,
         "archivedAssets": []
       }
     }

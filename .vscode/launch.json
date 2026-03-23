@@ -52,6 +52,13 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "backfill: run",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/backfill.mjs",
+      "console": "integratedTerminal"
+    },
+    {
       "name": "pipeline: full",
       "type": "node",
       "request": "launch",
