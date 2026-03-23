@@ -52,6 +52,18 @@ export function encodeSharedBuildPayload(payload) {
   }
 }
 
+export function extractVersionFromShareParam(search) {
+  try {
+    const params = new URLSearchParams(search)
+    const encoded = params.get(SHARE_BUILD_QUERY_KEY)
+    if (!encoded) return null
+    const parsed = JSON.parse(decodeBase64UrlUtf8(encoded))
+    return typeof parsed?.v === 'string' ? parsed.v : null
+  } catch {
+    return null
+  }
+}
+
 export function createShareBuildPayload({
   modelId,
   archetypeId,
@@ -60,7 +72,8 @@ export function createShareBuildPayload({
   playerTalentModifiers,
   models,
   schemaVersion,
-  metadata
+  metadata,
+  versionId
 }) {
   const normalizedModelId = modelId === 'Creature'
     ? 'Creature'
@@ -80,6 +93,7 @@ export function createShareBuildPayload({
   const sharePayload = {
     cv: SHARE_BUILD_CODEC_VERSION,
     sv: Number.isFinite(Number(schemaVersion)) ? Number(schemaVersion) : null,
+    v: typeof versionId === 'string' ? versionId : null,
     m: normalizedModelId,
     a: resolvedArchetypeId,
     t: normalizedTalents
@@ -239,7 +253,7 @@ export function parseSharedBuildFromSearch(searchValue, { models, schemaVersion,
     : []
 
   const codecVersion = Number(parsed.cv)
-  if (!Number.isFinite(codecVersion) || codecVersion !== SHARE_BUILD_CODEC_VERSION) {
+  if (!Number.isFinite(codecVersion) || codecVersion < 1) {
     warnings.push('This shared build uses an outdated share format version.')
   }
 

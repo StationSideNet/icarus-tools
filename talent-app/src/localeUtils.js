@@ -1,4 +1,4 @@
-import { LOCALE_BASE_URL, LOCALE_CONFIG_URL, MODIFIER_LABELS_URL, DEFAULT_LOCALE, LOCALE_COOKIE_NAME } from './constants.js'
+import { MODIFIER_LABELS_URL, DEFAULT_LOCALE, LOCALE_COOKIE_NAME } from './constants.js'
 import { flattenLocalizationByKey } from './utils.js'
 
 export function getLocaleLabel(localeCode) {
@@ -45,8 +45,8 @@ export function setLocaleCookie(localeCode) {
   document.cookie = `${LOCALE_COOKIE_NAME}=${encodeURIComponent(localeCode)}; path=/; max-age=${maxAgeSeconds}; samesite=lax`
 }
 
-export async function fetchLocaleStrings(localeCode) {
-  const response = await fetch(`${LOCALE_BASE_URL}/${localeCode}/Game.json`)
+export async function fetchLocaleStrings(localeCode, localeBaseUrl) {
+  const response = await fetch(`${localeBaseUrl}/${localeCode}/Game.json`)
   if (!response.ok) {
     return null
   }
@@ -69,8 +69,8 @@ export async function fetchModifierLabels() {
   return json
 }
 
-export async function fetchLocaleManifest() {
-  const response = await fetch(LOCALE_CONFIG_URL)
+export async function fetchLocaleManifest(localeConfigUrl) {
+  const response = await fetch(localeConfigUrl)
   if (!response.ok) {
     return null
   }

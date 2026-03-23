@@ -4,17 +4,19 @@
 
 import { resolveAppUrl } from './utils.js'
 
-export const DATA_URL = resolveAppUrl('Data/talents.json')
-export const BLUEPRINT_DATA_URL = resolveAppUrl('Data/blueprints.json')
-export const LOCALE_BASE_URL = resolveAppUrl('Exports/Icarus/Content/Localization/Game')
-export const LOCALE_CONFIG_URL = `${LOCALE_BASE_URL}/Game.json`
-export const MODIFIER_LABELS_URL = resolveAppUrl('Data/Localization/en.json')
+export const VERSIONS_URL = resolveAppUrl('Data/versions.json')
+export const getDataUrl = (versionId) => resolveAppUrl(`Data/${versionId}/talents.json`)
+export const getBlueprintDataUrl = (versionId) => resolveAppUrl(`Data/${versionId}/blueprints.json`)
+export const getLocaleBaseUrl = (versionId) => resolveAppUrl(`Data/${versionId}/Localization/Game`)
+export const getLocaleConfigUrl = (versionId) => `${getLocaleBaseUrl(versionId)}/Game.json`
+export const ASSET_BASE_URL = resolveAppUrl('Assets/Icarus/Content')
+export const MODIFIER_LABELS_URL = resolveAppUrl('UI/Localization/en.json')
 export const DEFAULT_LOCALE = 'en'
 export const LOCALE_COOKIE_NAME = 'talent_locale'
 export const SAVED_BUILDS_STORAGE_KEY = 'talent_saved_builds_v1'
 export const ACTIVE_BUILD_STORAGE_KEY = 'talent_active_builds_v2'
 export const SHARE_BUILD_QUERY_KEY = 'build'
-export const SHARE_BUILD_CODEC_VERSION = 1
+export const SHARE_BUILD_CODEC_VERSION = 2
 export const SAVED_BUILD_ACTION_FEEDBACK_MS = 1800
 export const SAVED_BUILD_DELETE_ANIMATION_MS = 1950
 export const ENABLED_MODELS = ['Player', 'Creature']

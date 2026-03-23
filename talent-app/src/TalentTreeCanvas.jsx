@@ -446,10 +446,10 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
               {isBlueprintNode ? (
                 <img
                   src={isSkilled
-                    ? resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Unlocked_Normal.png')
+                    ? resolveAppUrl('Assets/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Unlocked_Normal.png')
                     : isAvailableUnskilled
-                      ? resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Available_Normal.png')
-                      : resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Locked_Normal.png')
+                      ? resolveAppUrl('Assets/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Available_Normal.png')
+                      : resolveAppUrl('Assets/Icarus/Content/Assets/2DArt/UI/Tech_Tree/BlueprintCount_Locked_Normal.png')
                   }
                   alt={isSkilled ? '✓' : (isAvailableUnskilled ? '○' : '🔒')}
                   className="blueprint-status-badge"
@@ -492,7 +492,7 @@ function TalentTreeCanvas({ tree, ranks, modelId, localeStrings, skillInvestment
                   onMouseLeave={() => setHoveredBadgeId(null)}
                 >
                   <img
-                    src={resolveAppUrl('Exports/Icarus/Content/Assets/2DArt/UI/Icons/T_Icon_Star.png')}
+                    src={resolveAppUrl('Assets/Icarus/Content/Assets/2DArt/UI/Icons/T_Icon_Star.png')}
                     alt="★"
                     className="mission-node-badge-icon"
                   />

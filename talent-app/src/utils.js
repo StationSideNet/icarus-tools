@@ -21,7 +21,7 @@ export function parseNsLoc(value) {
   }
 }
 
-export function resolveAssetImagePath(unrealPath) {
+export function resolveAssetImagePath(unrealPath, selectedVersionId, versionsIndex) {
   if (!unrealPath || typeof unrealPath !== 'string' || !unrealPath.startsWith('/Game/')) {
     return null
   }
@@ -33,7 +33,30 @@ export function resolveAssetImagePath(unrealPath) {
     return null
   }
 
-  return resolveAppUrl(`Exports/Icarus/Content/${packagePath}.png`)
+  const relPath = `Icarus/Content/${packagePath}.png`
+
+  // Archive-aware resolution: find the correct version's asset
+  if (selectedVersionId && versionsIndex?.versions?.length) {
+    const versions = versionsIndex.versions
+    const selectedIndex = versions.findIndex((v) => v.id === selectedVersionId)
+    if (selectedIndex >= 0) {
+      // Walk versions from newest down to selectedVersion looking for an archive entry
+      // An entry in archivedAssets on version V means the file was archived under the
+      // PREVIOUS version's archive dir before V was written (i.e. the pre-V copy)
+      for (let i = 0; i < selectedIndex; i++) {
+        const v = versions[i]
+        if (Array.isArray(v.assets?.archivedAssets) && v.assets.archivedAssets.includes(relPath)) {
+          // The asset changed going into version v — so for versions older than v, serve archive
+          const archiveVersionId = versions[i + 1]?.id
+          if (archiveVersionId) {
+            return resolveAppUrl(`Assets/Archive/${archiveVersionId}/${relPath}`)
+          }
+        }
+      }
+    }
+  }
+
+  return resolveAppUrl(`Assets/${relPath}`)
 }
 
 export function resolveLocalizedValue(value, localeStrings, fallbackText = '') {

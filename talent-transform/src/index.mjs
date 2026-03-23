@@ -1,5 +1,6 @@
 import fs from "fs/promises";
 import path from "path";
+import { createHash } from "crypto";
 import { fileURLToPath } from "url";
 import { runPreflight } from "./preflight.mjs";
 
@@ -7,8 +8,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const DEFAULT_GAME_EXPORT_DIR = path.resolve(__dirname, "../../Exports");
-const DEFAULT_TALENTS_OUT_PATH = path.resolve(__dirname, "../../talent-app/public/Data/talents.json");
-const DEFAULT_BLUEPRINTS_OUT_PATH = path.resolve(__dirname, "../../talent-app/public/Data/blueprints.json");
 const DEFAULT_APP_PUBLIC_DIR = path.resolve(__dirname, "../../talent-app/public");
 
 const SOLO_MODEL = "Solo";
@@ -47,8 +46,6 @@ main().catch(handleFatalError);
 
 async function main() {
   const gameExportDir = options.gameExport ?? DEFAULT_GAME_EXPORT_DIR;
-  const talentsOutPath = options.out ?? DEFAULT_TALENTS_OUT_PATH;
-  const blueprintsOutPath = options.outBlueprints ?? DEFAULT_BLUEPRINTS_OUT_PATH;
   const appPublicDir = options.appPublic ?? DEFAULT_APP_PUBLIC_DIR;
 
   await runPreflight({ exportDir: gameExportDir });
@@ -105,6 +102,10 @@ async function main() {
   const featureLevelsData = featureLevelsFile ? await readJson(featureLevelsFile) : null;
   const dlcPackageData = dlcPackageFile ? await readJson(dlcPackageFile) : null;
   const projectVersion = await readProjectVersion(defaultGameIniFile);
+  const versionId = projectVersion.split('-')[0];
+  const versionDir = path.join(appPublicDir, 'Data', versionId);
+  const talentsOutPath = path.join(versionDir, 'talents.json');
+  const blueprintsOutPath = path.join(versionDir, 'blueprints.json');
 
   if (!accountFlagsFile) {
     console.warn("Flags/D_AccountFlags.json not found. Account flag mission enrichment will be skipped.");
@@ -238,30 +239,43 @@ async function main() {
   ];
 
   if (!options.skipCopyExports) {
-    const exportsTargetRoot = path.join(appPublicDir, "Exports");
-    const contentTargetDir = path.join(exportsTargetRoot, "Icarus", "Content");
-    const localizationTargetDir = path.join(contentTargetDir, "Localization", "Game");
+    const assetsTargetRoot = path.join(appPublicDir, "Assets");
+    const contentTargetDir = path.join(assetsTargetRoot, "Icarus", "Content");
+    const localizationTargetDir = path.join(versionDir, "Localization", "Game");
     const folderCopyStats = new Map();
     const sourceFileCountCache = new Map();
 
-    await fs.rm(exportsTargetRoot, { recursive: true, force: true });
-
+    // Localization is versioned — copy to Data/{versionId}/Localization/Game/
     const localizationResult = await copyLocalizationFiles(localizationSourceDir, localizationTargetDir);
     for (const copiedFile of localizationResult.copiedFiles) {
-      await recordFolderCopyStat(folderCopyStats, exportsTargetRoot, copiedFile, sourceFileCountCache);
+      await recordFolderCopyStat(folderCopyStats, appPublicDir, copiedFile, sourceFileCountCache);
     }
 
+    // Assets are shared — read previous version for archive attribution
+    const dataDir = path.join(appPublicDir, 'Data');
+    let previousVersionId = null;
+    try {
+      const existingIndex = JSON.parse(await fs.readFile(path.join(dataDir, 'versions.json'), 'utf8'));
+      const prev = existingIndex.versions?.[0];
+      if (prev && prev.id !== versionId) {
+        previousVersionId = prev.id;
+      }
+    } catch { /* no existing index */ }
+
+    const archiveDir = path.join(assetsTargetRoot, "Archive");
     const copyResult = await copyReferencedAssets({
       sourceContentDir: contentSourceDir,
       targetContentDir: contentTargetDir,
+      archiveDir,
+      previousVersionId,
       assetRefs
     });
 
     for (const copiedFile of copyResult.copiedFiles) {
-      await recordFolderCopyStat(folderCopyStats, exportsTargetRoot, copiedFile, sourceFileCountCache);
+      await recordFolderCopyStat(folderCopyStats, appPublicDir, copiedFile, sourceFileCountCache);
     }
 
-    console.log(`\n=== COPY SUMMARY ===\n${renderFolderCopySummaryTree(exportsTargetRoot, folderCopyStats)}\n`);
+    console.log(`\n=== COPY SUMMARY ===\n${renderFolderCopySummaryTree(assetsTargetRoot, folderCopyStats)}\n`);
 
     if (copyResult.missingAssets.length > 0) {
       const missingTree = renderMissingAssetsTree(copyResult.missingAssets);
@@ -270,8 +284,23 @@ async function main() {
       );
     }
 
+    const hasBlueprintData = Object.keys(blueprintTrees).length > 0;
+    await updateVersionsIndex({
+      dataDir,
+      versionId,
+      label: projectVersion,
+      generatedAt: new Date().toISOString(),
+      features: { talents: true, blueprints: hasBlueprintData },
+      assets: {
+        added: copyResult.addedCount,
+        changed: copyResult.changedCount,
+        unchanged: copyResult.unchangedCount,
+        archivedAssets: copyResult.archivedAssets
+      }
+    });
+
     console.log(
-      `Copied Exports subset to ${exportsTargetRoot} (locales: ${localizationResult.localeCodes.length}, assets: ${copyResult.copiedCount})`
+      `Copied Assets subset to ${assetsTargetRoot} (locales: ${localizationResult.localeCodes.length}, added: ${copyResult.addedCount}, changed: ${copyResult.changedCount}, unchanged: ${copyResult.unchangedCount})`
     );
   }
 
@@ -285,12 +314,6 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (arg === "--game-export") {
       opts.gameExport = argv[i + 1];
-      i += 1;
-    } else if (arg === "--out") {
-      opts.out = argv[i + 1];
-      i += 1;
-    } else if (arg === "--out-blueprints") {
-      opts.outBlueprints = argv[i + 1];
       i += 1;
     } else if (arg === "--app-public") {
       opts.appPublic = argv[i + 1];
@@ -1286,11 +1309,55 @@ function unrealToRelativePngPath(unrealPath) {
   return `${packagePath}.png`;
 }
 
-async function copyReferencedAssets({ sourceContentDir, targetContentDir, assetRefs = [], unrealPaths = [] }) {
+function compareVersionIds(a, b) {
+  const aParts = String(a).split('.').map(Number);
+  const bParts = String(b).split('.').map(Number);
+  const len = Math.max(aParts.length, bParts.length);
+  for (let i = 0; i < len; i++) {
+    const diff = (aParts[i] ?? 0) - (bParts[i] ?? 0);
+    if (diff !== 0) return diff;
+  }
+  return 0;
+}
+
+async function updateVersionsIndex({ dataDir, versionId, label, generatedAt, features, assets }) {
+  const indexPath = path.join(dataDir, 'versions.json');
+  let index = { latest: null, versions: [] };
+  try {
+    index = JSON.parse(await fs.readFile(indexPath, 'utf8'));
+  } catch { /* no existing index */ }
+
+  const entry = { id: versionId, label, generatedAt, features, assets };
+  const existing = index.versions.findIndex((v) => v.id === versionId);
+  if (existing >= 0) {
+    index.versions[existing] = entry;
+  } else {
+    index.versions.push(entry);
+  }
+
+  index.versions.sort((a, b) => compareVersionIds(b.id, a.id));
+  index.latest = index.versions[0].id;
+
+  await fs.mkdir(dataDir, { recursive: true });
+  await fs.writeFile(indexPath, JSON.stringify(index, null, 2) + '\n', 'utf8');
+  console.log(`Updated versions.json — latest: ${index.latest} (${index.versions.length} version${index.versions.length === 1 ? '' : 's'})`);
+}
+
+async function sha256File(filePath) {
+  const hash = createHash('sha256');
+  const data = await fs.readFile(filePath);
+  hash.update(data);
+  return hash.digest('hex');
+}
+
+async function copyReferencedAssets({ sourceContentDir, targetContentDir, archiveDir, previousVersionId, assetRefs = [], unrealPaths = [] }) {
   const missingAssets = [];
   const copiedFiles = [];
   const mergedRefsByRelPath = new Map();
-  let copiedCount = 0;
+  let addedCount = 0;
+  let changedCount = 0;
+  let unchangedCount = 0;
+  const archivedAssets = [];
 
   const normalizedAssetRefs = [
     ...assetRefs,
@@ -1338,14 +1405,40 @@ async function copyReferencedAssets({ sourceContentDir, targetContentDir, assetR
       continue;
     }
 
+    const targetExists = await pathExists(targetPath);
+    if (targetExists) {
+      const sourceHash = await sha256File(sourcePath);
+      const targetHash = await sha256File(targetPath);
+
+      if (sourceHash === targetHash) {
+        unchangedCount += 1;
+        continue;
+      }
+
+      // Changed — archive old file before overwriting
+      if (archiveDir && previousVersionId) {
+        const archivePath = path.join(archiveDir, previousVersionId, relPngPath);
+        await fs.mkdir(path.dirname(archivePath), { recursive: true });
+        await fs.copyFile(targetPath, archivePath);
+        archivedAssets.push(relPngPath.split(path.sep).join('/'));
+      }
+
+      changedCount += 1;
+    } else {
+      addedCount += 1;
+    }
+
     await fs.mkdir(path.dirname(targetPath), { recursive: true });
     await fs.copyFile(sourcePath, targetPath);
     copiedFiles.push({ sourcePath, targetPath });
-    copiedCount += 1;
   }
 
   return {
-    copiedCount,
+    copiedCount: addedCount + changedCount,
+    addedCount,
+    changedCount,
+    unchangedCount,
+    archivedAssets,
     missingAssets,
     copiedFiles
   };

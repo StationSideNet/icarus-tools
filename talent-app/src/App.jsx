@@ -7,8 +7,8 @@ import { resolveAssetImagePath, resolveLocalizedValue, areStringArraysEqual, ext
 import { shouldHideTalent, resolveEffectiveRequiredTalentIds, getTreeTalentPoints, summarizeTalentPoints } from './talentUtils.js'
 import { resolveModifierEffectTemplate, interpolateEffectTemplate, formatModifierTotal } from './effectUtils.js'
 import {
-  DATA_URL, BLUEPRINT_DATA_URL, DEFAULT_LOCALE,
-  SHARE_BUILD_QUERY_KEY, SAVED_BUILD_ACTION_FEEDBACK_MS, SAVED_BUILD_DELETE_ANIMATION_MS,
+  VERSIONS_URL, getDataUrl, getBlueprintDataUrl, getLocaleBaseUrl, getLocaleConfigUrl,
+  DEFAULT_LOCALE, SHARE_BUILD_QUERY_KEY, SAVED_BUILD_ACTION_FEEDBACK_MS, SAVED_BUILD_DELETE_ANIMATION_MS,
   ENABLED_MODELS, BLUEPRINT_MODEL_ID, RANK_INVESTMENTS, MAX_TALENT_POINTS, MAX_SOLO_POINTS,
   CREATURE_MOUNT_LEVEL_CAP, CREATURE_BASE_ARCHETYPE_ID, HIDDEN_CREATURE_ARCHETYPE_IDS,
   CREATURE_TAB_GROUPS, GITHUB_REPO_URL, ROCKETWERKZ_URL, ICARUS_STEAM_URL, TOP_MENU_ICON_UNREAL_PATHS
@@ -24,7 +24,7 @@ import {
   createNextActiveBuildsSnapshot, getActiveBuildMetadata, createSavedBuildId,
   resolveSavedBuildContext, formatSavedBuildTimestamp
 } from './buildUtils.js'
-import { encodeSharedBuildPayload, createShareBuildPayload, createShareUrlFromPayload, parseSharedBuildFromSearch } from './buildSerializer.js'
+import { encodeSharedBuildPayload, createShareBuildPayload, createShareUrlFromPayload, parseSharedBuildFromSearch, extractVersionFromShareParam } from './buildSerializer.js'
 import { readSavedBuildsFromStorage, writeSavedBuildsToStorage, readActiveBuildsFromStorage, writeActiveBuildsToStorage } from './storage.js'
 import { getSavedLocaleFromCookie, setLocaleCookie, fetchLocaleStrings, fetchModifierLabels, fetchLocaleManifest } from './localeUtils.js'
 import { DataProvider } from './DataContext.jsx'
@@ -35,6 +35,7 @@ import DisclaimerDialog from './DisclaimerDialog.jsx'
 import AppFooter from './AppFooter.jsx'
 import EffectsSummarySection from './EffectsSummarySection.jsx'
 import LocaleDropdown from './LocaleDropdown.jsx'
+import VersionDropdown from './VersionDropdown.jsx'
 import CreatureArchetypeDropdown from './CreatureArchetypeDropdown.jsx'
 
 function BrandName() {
@@ -93,6 +94,8 @@ function mergeDatasets(talentsData, blueprintsData) {
 }
 
 function App() {
+  const [versionsIndex, setVersionsIndex] = useState(null)
+  const [selectedVersionId, setSelectedVersionId] = useState(null)
   const [data, setData] = useState(null)
   const [locale, setLocale] = useState(() => getSavedLocaleFromCookie() || DEFAULT_LOCALE)
   const [availableLocales, setAvailableLocales] = useState([DEFAULT_LOCALE])
@@ -130,11 +133,11 @@ function App() {
   const [selectedPlayerModifierIds, setSelectedPlayerModifierIds] = useState([])
   const [selectedCreatureMetaGroupId, setSelectedCreatureMetaGroupId] = useState('mount')
   const topMenuIcons = useMemo(() => ({
-    Player: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.Player) || '',
-    Creature: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.Creature) || '',
-    TechTree: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.TechTree) || '',
-    Workshop: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.Workshop) || ''
-  }), [])
+    Player: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.Player, selectedVersionId, versionsIndex) || '',
+    Creature: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.Creature, selectedVersionId, versionsIndex) || '',
+    TechTree: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.TechTree, selectedVersionId, versionsIndex) || '',
+    Workshop: resolveAssetImagePath(TOP_MENU_ICON_UNREAL_PATHS.Workshop, selectedVersionId, versionsIndex) || ''
+  }), [selectedVersionId, versionsIndex])
 
   const getHumanErrorMessage = (errorCode) => {
     const messages = {
@@ -149,33 +152,59 @@ function App() {
     return messages[errorCode] || messages.default
   }
 
+  // Phase 1: load versions.json on mount, pre-decode URL for version hint
   useEffect(() => {
     let active = true
 
+    const loadVersions = async () => {
+      const sharedVersionId = extractVersionFromShareParam(window.location.search)
+      const response = await fetch(VERSIONS_URL)
+      const index = await response.json()
+      if (!active) return
+      setVersionsIndex(index)
+      setSelectedVersionId(sharedVersionId && index.versions?.some((v) => v.id === sharedVersionId)
+        ? sharedVersionId
+        : index.latest)
+    }
+
+    loadVersions().catch((err) => console.error('Failed to load versions index', err))
+
+    return () => { active = false }
+  }, [])
+
+  // Phase 2: load game data whenever selectedVersionId changes
+  useEffect(() => {
+    if (!selectedVersionId) return
+    let active = true
+
+    const selectedVersion = versionsIndex?.versions?.find((v) => v.id === selectedVersionId)
+
     const loadData = async () => {
-      const talentsResponse = await fetch(DATA_URL)
+      const talentsResponse = await fetch(getDataUrl(selectedVersionId))
       const talentsJson = await talentsResponse.json()
 
       let blueprintsJson = null
-      try {
-        const blueprintsResponse = await fetch(BLUEPRINT_DATA_URL)
-        if (blueprintsResponse.ok) {
-          blueprintsJson = await blueprintsResponse.json()
+      if (selectedVersion?.features?.blueprints !== false) {
+        try {
+          const blueprintsResponse = await fetch(getBlueprintDataUrl(selectedVersionId))
+          if (blueprintsResponse.ok) {
+            blueprintsJson = await blueprintsResponse.json()
+          }
+        } catch (error) {
+          console.warn('Blueprint data not available, Tech Tree mode will be disabled.', error)
         }
-      } catch (error) {
-        console.warn('Blueprint data not available, Tech Tree mode will be disabled.', error)
       }
 
       if (!active) return
       setData(mergeDatasets(talentsJson, blueprintsJson))
+      // Reset active-build hydration so the new data triggers re-hydration
+      setHasHydratedActiveBuild(false)
     }
 
     loadData().catch((err) => console.error('Failed to load data', err))
 
-    return () => {
-      active = false
-    }
-  }, [])
+    return () => { active = false }
+  }, [selectedVersionId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     writeSavedBuildsToStorage(savedBuilds)
@@ -334,7 +363,8 @@ function App() {
       playerTalentModifiers: data.playerTalentModifiers,
       models: data.models,
       schemaVersion: data.schemaVersion,
-      metadata: pendingSharedMetadata
+      metadata: pendingSharedMetadata,
+      versionId: selectedVersionId
     })
 
     const encodedPayload = encodeSharedBuildPayload(shareBuildPayload)
@@ -389,9 +419,10 @@ function App() {
   }, [])
 
   useEffect(() => {
+    if (!selectedVersionId) return
     let active = true
 
-    fetchLocaleManifest()
+    fetchLocaleManifest(getLocaleConfigUrl(selectedVersionId))
       .then((manifest) => {
         if (!active || !manifest) return
 
@@ -416,12 +447,14 @@ function App() {
     return () => {
       active = false
     }
-  }, [])
+  }, [selectedVersionId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
+    if (!selectedVersionId) return
     let active = true
 
-    const cached = localeCacheRef.current[locale]
+    const cacheKey = `${selectedVersionId}:${locale}`
+    const cached = localeCacheRef.current[cacheKey]
     if (cached) {
       setLocaleStrings(cached)
       return () => {
@@ -429,18 +462,21 @@ function App() {
       }
     }
 
+    const localeBaseUrl = getLocaleBaseUrl(selectedVersionId)
+
     const loadLocale = async () => {
-      const requested = await fetchLocaleStrings(locale)
+      const requested = await fetchLocaleStrings(locale, localeBaseUrl)
       if (requested && active) {
-        localeCacheRef.current[locale] = requested
+        localeCacheRef.current[cacheKey] = requested
         setLocaleStrings(requested)
         return
       }
 
       if (locale !== DEFAULT_LOCALE) {
-        const fallback = await fetchLocaleStrings(DEFAULT_LOCALE)
+        const fallbackKey = `${selectedVersionId}:${DEFAULT_LOCALE}`
+        const fallback = await fetchLocaleStrings(DEFAULT_LOCALE, localeBaseUrl)
         if (fallback && active) {
-          localeCacheRef.current[DEFAULT_LOCALE] = fallback
+          localeCacheRef.current[fallbackKey] = fallback
           setLocaleStrings(fallback)
         }
       }
@@ -453,7 +489,7 @@ function App() {
     return () => {
       active = false
     }
-  }, [locale])
+  }, [locale, selectedVersionId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (!locale) return
@@ -1033,6 +1069,7 @@ function App() {
       title,
       description,
       createdAt: Date.now(),
+      versionId: selectedVersionId,
       modelId,
       archetypeId: selectedArchetype?.id ?? '',
       skilledTalents: scopedSkilledTalents,
@@ -1051,6 +1088,7 @@ function App() {
         title,
         description,
         createdAt: Date.now(),
+        versionId: selectedVersionId,
         modelId,
         archetypeId: selectedArchetype?.id ?? '',
         skilledTalents: scopedSkilledTalents,
@@ -1082,7 +1120,17 @@ function App() {
   }
 
   const handleLoadSavedBuild = (savedBuild) => {
-    if (!savedBuild || !data?.models) return false
+    if (!savedBuild) return false
+
+    // If the saved build is from a different version, switch version first
+    const buildVersionId = savedBuild.versionId ?? versionsIndex?.latest
+    if (buildVersionId && buildVersionId !== selectedVersionId) {
+      setSelectedVersionId(buildVersionId)
+      // Data reload will trigger re-hydration; the build won't be loaded now
+      return true
+    }
+
+    if (!data?.models) return false
 
     const savedModelId = data.models[savedBuild.modelId] ? savedBuild.modelId : 'Player'
     const savedModel = data.models[savedModelId]
@@ -1301,7 +1349,8 @@ function App() {
       playerTalentModifiers: data?.playerTalentModifiers,
       models: data?.models,
       schemaVersion: data?.schemaVersion,
-      metadata: pendingSharedMetadata
+      metadata: pendingSharedMetadata,
+      versionId: selectedVersionId
     })
 
     const shareUrl = createShareUrlFromPayload(shareBuildPayload)
@@ -1335,7 +1384,8 @@ function App() {
       metadata: {
         title: savedBuild.title,
         description: savedBuild.description || ''
-      }
+      },
+      versionId: savedBuild.versionId ?? selectedVersionId
     })
 
     const shareUrl = createShareUrlFromPayload(shareBuildPayload)
@@ -1579,13 +1629,19 @@ function App() {
   const projectVersionLabel = data?.projectVersion || '—'
   const calculatorVersionLabel = import.meta.env.VITE_CALCULATOR_VERSION || '—'
 
+  const selectedVersionEntry = versionsIndex?.versions?.find((v) => v.id === selectedVersionId) ?? null
+  const isBlueprintsEnabled = selectedVersionEntry?.features?.blueprints !== false
+
   const dataContextValue = useMemo(() => ({
     data,
     models: data?.models ?? null,
     ranks: data?.ranks ?? {},
     localeStrings,
-    modifierLabels
-  }), [data, localeStrings, modifierLabels])
+    modifierLabels,
+    versionsIndex,
+    selectedVersionId,
+    setSelectedVersionId
+  }), [data, localeStrings, modifierLabels, versionsIndex, selectedVersionId])
 
   const localeContextValue = useMemo(() => ({
     locale,
@@ -1636,13 +1692,15 @@ function App() {
               <button type="button" className="menu-link active">
                 <MenuItemLabel iconPath={topMenuIcons.Player} label="Player" />
               </button>
-              <button
-                type="button"
-                className={modelId === BLUEPRINT_MODEL_ID ? 'menu-link active' : 'menu-link'}
-                onClick={() => handleSelectModel(BLUEPRINT_MODEL_ID)}
-              >
-                <MenuItemLabel iconPath={topMenuIcons.TechTree} label="Tech Tree" />
-              </button>
+              {isBlueprintsEnabled && (
+                <button
+                  type="button"
+                  className={modelId === BLUEPRINT_MODEL_ID ? 'menu-link active' : 'menu-link'}
+                  onClick={() => handleSelectModel(BLUEPRINT_MODEL_ID)}
+                >
+                  <MenuItemLabel iconPath={topMenuIcons.TechTree} label="Tech Tree" />
+                </button>
+              )}
               <button type="button" className="menu-link" disabled title="Coming sooon…">
                 <MenuItemLabel iconPath={topMenuIcons.Workshop} label="Workshop" />
               </button>
@@ -1650,6 +1708,13 @@ function App() {
           </div>
 
           <div className="top-nav-right">
+            {versionsIndex && (
+              <VersionDropdown
+                versions={versionsIndex.versions}
+                selectedVersionId={selectedVersionId}
+                onSelectVersion={setSelectedVersionId}
+              />
+            )}
             <LocaleDropdown
               locales={availableLocales}
               selectedLocale={locale}
@@ -1705,13 +1770,15 @@ function App() {
                 />
               </button>
             ))}
-            <button
-              type="button"
-              className={modelId === BLUEPRINT_MODEL_ID ? 'menu-link active' : 'menu-link'}
-              onClick={() => handleSelectModel(BLUEPRINT_MODEL_ID)}
-            >
-              <MenuItemLabel iconPath={topMenuIcons.TechTree} label="Tech Tree" />
-            </button>
+            {isBlueprintsEnabled && (
+              <button
+                type="button"
+                className={modelId === BLUEPRINT_MODEL_ID ? 'menu-link active' : 'menu-link'}
+                onClick={() => handleSelectModel(BLUEPRINT_MODEL_ID)}
+              >
+                <MenuItemLabel iconPath={topMenuIcons.TechTree} label="Tech Tree" />
+              </button>
+            )}
             <button type="button" className="menu-link" disabled title="Coming sooon…">
               <MenuItemLabel iconPath={topMenuIcons.Workshop} label="Workshop" />
             </button>
@@ -1719,6 +1786,13 @@ function App() {
         </div>
 
         <div className="top-nav-right">
+          {versionsIndex && (
+            <VersionDropdown
+              versions={versionsIndex.versions}
+              selectedVersionId={selectedVersionId}
+              onSelectVersion={setSelectedVersionId}
+            />
+          )}
           <LocaleDropdown
             locales={availableLocales}
             selectedLocale={locale}
